@@ -19,7 +19,7 @@
         <h1 class="text-2xl font-bold text-slate-900 mt-1">Syed Arif Ali — Grievance Resolution Portal</h1>
         <p class="text-xs text-slate-500">Live PostgreSQL Database View • AMUSU Elections 2026</p>
       </div>
-      <button onclick="fetchAllGrievances()" class="bg-[#064426] hover:bg-[#032115] text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
+      <button onclick="fetchAllGrievances()" class="bg-[#064426] hover:bg-[#032115] text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm transition-all">
         <span>🔄</span>
         <span>Refresh Feed</span>
       </button>
@@ -29,7 +29,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
       <div class="p-4 border-b border-stone-200 bg-stone-50 font-bold text-xs text-slate-700 flex justify-between items-center">
         <span>All Recorded Grievances (<span id="totalCount">0</span>)</span>
-        <span class="text-[11px] text-slate-500">Updates sync to the public site immediately</span>
+        <span class="text-[11px] text-slate-500">Actions sync immediately across all voter devices</span>
       </div>
 
       <div class="overflow-x-auto">
@@ -41,7 +41,7 @@
               <th class="py-3 px-4">Hall</th>
               <th class="py-3 px-4">Issue Details</th>
               <th class="py-3 px-4">Current Status</th>
-              <th class="py-3 px-4">Action</th>
+              <th class="py-3 px-4">Actions</th>
             </tr>
           </thead>
           <tbody id="adminTableBody" class="divide-y divide-stone-200 font-medium">
@@ -65,7 +65,7 @@
         document.getElementById('totalCount').innerText = data.length;
         renderAdminTable(data);
       } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Failed to connect to Render database. Check your internet connection.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Failed to connect to Render database.</td></tr>';
       }
     }
 
@@ -97,14 +97,20 @@
               ${r.status}
             </span>
           </td>
-          <td class="py-3 px-4 space-y-1.5">
-            <select onchange="updateStatus('${r.ticket_id}', this.value)" class="text-[11px] bg-white border border-stone-300 rounded px-2 py-1 font-medium focus:outline-none focus:border-emerald-600">
-              <option value="">Update Status...</option>
-              <option value="Scheduled for Court Action">Scheduled for Court</option>
-              <option value="Tabled in Court Agenda">Tabled in Court Agenda</option>
-              <option value="Under Statutory Review">Under Review</option>
-              <option value="Resolved / Redressed">Mark Resolved ✔</option>
-            </select>
+          <td class="py-3 px-4">
+            <div class="flex items-center gap-2">
+              <select onchange="updateStatus('${r.ticket_id}', this.value)" class="text-[11px] bg-white border border-stone-300 rounded px-2 py-1.5 font-medium focus:outline-none focus:border-emerald-600">
+                <option value="">Status...</option>
+                <option value="Scheduled for Court Action">Scheduled for Court</option>
+                <option value="Tabled in Court Agenda">Tabled in Court</option>
+                <option value="Under Statutory Review">Under Review</option>
+                <option value="Resolved / Redressed">Mark Resolved ✔</option>
+              </select>
+
+              <button onclick="deleteGrievance('${r.ticket_id}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 p-1.5 rounded-lg text-xs font-bold transition-all" title="Permanently Delete">
+                🗑️
+              </button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -123,6 +129,19 @@
         fetchAllGrievances();
       } catch (err) {
         alert('Failed to update status on server.');
+      }
+    }
+
+    async function deleteGrievance(ticketId) {
+      if (!confirm(`Are you sure you want to permanently delete ticket ${ticketId}?`)) return;
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/grievances/${ticketId}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error();
+        fetchAllGrievances();
+      } catch (err) {
+        alert('Failed to delete grievance from server.');
       }
     }
 

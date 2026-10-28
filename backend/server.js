@@ -133,5 +133,21 @@ app.patch('/api/grievances/:ticket_id', async (req, res) => {
   }
 });
 
+// DELETE: Remove a grievance permanently from PostgreSQL
+app.delete('/api/grievances/:ticket_id', async (req, res) => {
+  try {
+    const { ticket_id } = req.params;
+    const deleteRes = await pool.query('DELETE FROM grievances WHERE ticket_id = $1 RETURNING *;', [ticket_id]);
+    
+    if (deleteRes.rows.length === 0) {
+      return res.status(404).json({ error: 'Ticket not found.' });
+    }
+    res.status(200).json({ message: 'Grievance deleted successfully', deleted: deleteRes.rows[0] });
+  } catch (err) {
+    console.error('DELETE error:', err.message);
+    res.status(500).json({ error: 'Database delete failure' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`API active on port ${PORT}`));
