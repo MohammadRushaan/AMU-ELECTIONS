@@ -151,28 +151,62 @@
         </div>
       </div>
 
+      <!-- Improvised Candidate Showcase Card -->
       <div class="lg:col-span-5 flex justify-center">
         <div class="relative w-full max-w-sm">
-          <div class="absolute -inset-2 bg-gradient-to-tr from-amu-emerald via-amu-gold to-emerald-700 rounded-3xl blur-xl opacity-25"></div>
-          <div class="relative bg-white p-5 rounded-3xl border border-stone-200 shadow-soft text-center">
-            <div class="w-full h-80 sm:h-96 rounded-2xl overflow-hidden mb-4 border border-stone-200 bg-stone-50 flex items-center justify-center relative">
+          
+          <!-- Layered Ambient Glow -->
+          <div class="absolute -inset-2.5 bg-gradient-to-tr from-amu-emerald via-amu-gold to-emerald-600 rounded-[2.5rem] blur-xl opacity-30 animate-pulse"></div>
+          
+          <div class="relative bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-[2rem] border border-stone-200 shadow-xl text-center space-y-4">
+            
+            <!-- Candidate Photo Frame with AMU Accents -->
+            <div class="w-full h-84 sm:h-96 rounded-2xl overflow-hidden border border-emerald-900/10 bg-gradient-to-b from-stone-50 via-emerald-50/20 to-stone-100 flex items-end justify-center relative shadow-inner group">
+              
+              <!-- Floating Top Badges -->
+              <div class="absolute top-3.5 left-3.5 bg-amu-deep/90 backdrop-blur-md text-amber-300 text-[10px] uppercase tracking-wider px-3 py-1 rounded-full font-extrabold border border-amber-400/30 shadow-sm flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                AMU Court 2026
+              </div>
+
+              <div class="absolute top-3.5 right-3.5 bg-amu-emerald text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
+                Nominee
+              </div>
+
+              <!-- Candidate Image with Zoom Hover Effect -->
               <img src="assets/candidate.png" 
                    onerror="this.onerror=null; this.src='assest/candidate.png';" 
                    alt="Syed Arif Ali - Candidate for Court Member" 
-                   class="w-full h-full object-contain object-center">
-              <div class="absolute top-3 right-3 bg-amu-deep/85 backdrop-blur-sm text-amber-300 text-[11px] px-3 py-1 rounded-full font-bold">
-                Nominee
+                   class="w-full h-full object-contain object-bottom transition-transform duration-500 group-hover:scale-105 drop-shadow-md">
+            </div>
+            
+            <!-- Candidate Title & Credentials -->
+            <div class="space-y-1.5 pt-1">
+              <h3 class="font-display font-black text-slate-900 text-2xl tracking-tight">Syed Arif Ali</h3>
+              <div class="text-xs font-extrabold text-amu-gold uppercase tracking-wider flex items-center justify-center gap-2">
+                <span>Final Year</span>
+                <span class="w-1 h-1 rounded-full bg-amu-gold"></span>
+                <span>Civil Engineering</span>
+              </div>
+              <div class="text-xs text-slate-500 font-medium">Faculty of Engineering & Technology (ZHCET)</div>
+              
+              <!-- Credential Pills -->
+              <div class="flex items-center justify-center gap-1.5 pt-2 flex-wrap text-[10px] font-bold text-slate-600">
+                <span class="bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-md">ZHCET Civil</span>
+                <span class="bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-md">Section 22 Mandate</span>
+                <span class="bg-emerald-50 text-amu-emerald border border-emerald-200 px-2 py-0.5 rounded-md">Peer Representative</span>
               </div>
             </div>
-            <div class="space-y-1">
-              <h3 class="font-display font-bold text-slate-900 text-xl">Syed Arif Ali</h3>
-              <div class="text-xs font-bold text-amu-gold uppercase">Final year Civil Engineering</div>
-              <div class="text-xs text-slate-500 font-medium">Faculty of Engineering & Technology (ZHCET)</div>
-            </div>
-            <div class="mt-4 pt-3.5 border-t border-stone-100 flex items-center justify-center gap-1.5 text-xs text-emerald-800 font-bold">
-              <svg class="w-4 h-4 fill-emerald-600" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+
+            <!-- Election Commission Seal -->
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-center gap-2 text-xs text-emerald-800 font-bold bg-emerald-50/50 py-2 rounded-xl border border-emerald-100">
+              <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
+              </span>
               <span>Election Commission Validated Candidate</span>
             </div>
+
           </div>
         </div>
       </div>
@@ -419,8 +453,8 @@
     <!-- 7. CROSS-FACULTY & POLYTECHNIC GRIEVANCE TRACKING PORTAL -->
     <section id="grievance" class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-10 shadow-soft max-w-4xl mx-auto space-y-8">
       
-      <div class="text-center max-w-2xl mx-auto space-y-2">
-        <span class="inline-block bg-amu-gold text-slate-950 text-xs font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider">
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <span class="inline-block bg-amu-gold text-slate-950 text-xs font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
           Student Grievance Redressal Desk
         </span>
         <h2 class="text-2xl sm:text-3xl font-display font-black text-slate-900">
@@ -429,6 +463,12 @@
         <p class="text-xs sm:text-sm text-slate-600">
           Submit your concerns regarding labs, dining halls, Wi-Fi, or hostel maintenance directly to Syed Arif Ali.
         </p>
+        
+        <!-- Promised 7-Day Fast Resolution Guarantee Strip -->
+        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-50 via-amber-50 to-emerald-50 text-emerald-950 border border-emerald-300/80 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-sm">
+          <span class="text-base">⚡</span>
+          <span><strong>7-Day Rapid Statutory Redressal Guarantee:</strong> Every verified issue is processed and formally tabled before university authorities within 7 days.</span>
+        </div>
       </div>
 
       <!-- Live Real-Time Docket Metrics Bar -->
@@ -477,20 +517,16 @@
             </select>
           </div>
 
+          <!-- Hall of Residence (Restricted to Designated Halls) -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Hall of Residence</label>
             <select required id="hall" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
               <option value="">Select Hall</option>
+              <option value="Sarojini Naidu Hall">Sarojini Naidu Hall</option>
+              <option value="Bibi Fatima Hall">Bibi Fatima Hall</option>
               <option value="Nadeem Tarin Hall">Nadeem Tarin Hall</option>
+              <option value="Ross Masood Hall">Ross Masood Hall</option>
               <option value="Suleiman Hall">Suleiman Hall</option>
-              <option value="V.M. Hall">V.M. Hall</option>
-              <option value="Mohammad Morrison Hall">Mohammad Morrison Hall</option>
-              <option value="Sir Syed Hall (North/South)">Sir Syed Hall (North/South)</option>
-              <option value="Aftab Hall">Aftab Hall</option>
-              <option value="Mohsinul Mulk Hall">Mohsinul Mulk Hall</option>
-              <option value="Indira Gandhi (IG) Hall">Indira Gandhi (IG) Hall</option>
-              <option value="Sarojini Naidu (SN) Hall">Sarojini Naidu (SN) Hall</option>
-              <option value="Non-Resident (NR)">Non-Resident (NR Scholar)</option>
             </select>
           </div>
         </div>
