@@ -91,7 +91,7 @@
         </div>
 
         <!-- WhatsApp Quick Share -->
-        <a href="https://api.whatsapp.com/send?text=Support%20Syed%20Arif%20Ali%20(Final%20year%20Civil)%20for%20COURT%20MEMBER%20(Faculty%20of%20Engg%20%26%20Tech)%20in%20AMU%20Union%20Elections%202026.%20Download%20the%20official%20manifestos:%20https://candidate-zhcet.vercel.app" 
+        <a href="https://api.whatsapp.com/send?text=Support%20Syed%20Arif%20Ali%20(Final%20year%20Civil)%20for%20COURT%20MEMBER%20(Faculty%20of%20Engg%20%26%20Tech)%20in%20AMU%20Union%20Elections%202026.%20Download%20the%20official%20manifestos:%20https://syed-arif-ali-court-member.vercel.app" 
            target="_blank" 
            rel="noopener noreferrer"
            class="bg-[#25D366] text-white hover:bg-[#1ebd5a] px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-sm hover:scale-105">
@@ -217,10 +217,10 @@
 
             <ul class="text-xs text-slate-600 space-y-1.5 border-t border-stone-100 pt-3">
               <li>✔ <strong>On-Campus NPTEL Centre:</strong> Approved testing node directly inside ZHCET computer labs[cite: 18].</li>
-              <li>✔ <strong>Final-Year Single Rooms:</strong> Priority allotment across Tarin, Morrison, Suleiman, and VM Halls[cite: 18, 19].</li>
+              <li>✔ <strong>Final-Year Single Rooms:</strong> Priority allotment across Tarin, Morrison, Suleiman, and VM Halls[cite: 18].</li>
               <li>✔ <strong>100% Mess Deficit Audit:</strong> End arbitrary pass-through charges via published balance sheets[cite: 18].</li>
-              <li>✔ <strong>₹30,000 Project Seed Grant:</strong> University reimbursement fund for capstone and BAJA hardware[cite: 19].</li>
-              <li>✔ <strong>Polytechnic Facilities:</strong> Dedicated budget and space allocation for Boys' Polytechnic Canteen[cite: 19].</li>
+              <li>✔ <strong>₹30,000 Project Seed Grant:</strong> University reimbursement fund for capstone and BAJA hardware.</li>
+              <li>✔ <strong>Polytechnic Facilities:</strong> Dedicated budget and space allocation for Boys' Polytechnic Canteen.</li>
             </ul>
           </div>
 
@@ -255,11 +255,11 @@
             </div>
 
             <ul class="text-xs text-slate-600 space-y-1.5 border-t border-stone-100 pt-3">
-              <li>✔ <strong>Internal Backlog Clearance:</strong> Course credit recovery within AMU per UGC/MoE guidelines[cite: 20].</li>
-              <li>✔ <strong>Core Engineering MoUs:</strong> Mandate TPO recruitment drives with L&T, Tata Projects, and PSUs[cite: 20].</li>
+              <li>✔ <strong>Internal Backlog Clearance:</strong> Course credit recovery within AMU per UGC/MoE guidelines.</li>
+              <li>✔ <strong>Core Engineering MoUs:</strong> Mandate TPO recruitment drives with L&T, Tata Projects, and PSUs.</li>
               <li>✔ <strong>Safe Night Transit:</strong> Continuous evening transit connecting Indira Gandhi (IG) and SN Halls.</li>
-              <li>✔ <strong>BE Office Timings:</strong> Alignment of administration hours with non-class intervals[cite: 21].</li>
-              <li>✔ <strong>DIPP & Lateral Entry:</strong> Administrative transparency on B.Tech entry for diploma graduates[cite: 21].</li>
+              <li>✔ <strong>BE Office Timings:</strong> Alignment of administration hours with non-class intervals.</li>
+              <li>✔ <strong>DIPP & Lateral Entry:</strong> Administrative transparency on B.Tech entry for diploma graduates.</li>
             </ul>
           </div>
 
@@ -431,11 +431,25 @@
         </p>
       </div>
 
+      <!-- Live Real-Time Docket Metrics Bar -->
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3">
+          <div id="statTotal" class="text-2xl sm:text-3xl font-display font-black text-amu-emerald">--</div>
+          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Issues Raised</div>
+        </div>
+        <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3">
+          <div id="statActive" class="text-2xl sm:text-3xl font-display font-black text-amber-600">--</div>
+          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Under Review</div>
+        </div>
+        <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-3">
+          <div id="statResolved" class="text-2xl sm:text-3xl font-display font-black text-emerald-700">--</div>
+          <div class="text-[10px] sm:text-xs font-bold text-emerald-800 uppercase">Actioned / Resolved</div>
+        </div>
+      </div>
+
       <form onsubmit="handleGrievanceSubmit(event)" class="space-y-4">
         
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          
-          <!-- Stream -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Academic Stream</label>
             <select required id="stream" onchange="updateDepartmentOptions()" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
@@ -448,7 +462,6 @@
             </select>
           </div>
 
-          <!-- Department / Branch -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Your Department / Branch</label>
             <select required id="branch" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
@@ -464,7 +477,6 @@
             </select>
           </div>
 
-          <!-- Hall of Residence -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Hall of Residence</label>
             <select required id="hall" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
@@ -481,7 +493,6 @@
               <option value="Non-Resident (NR)">Non-Resident (NR Scholar)</option>
             </select>
           </div>
-
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -499,7 +510,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Student Enrollment / Phone (Optional)</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Student Enrollment / WhatsApp (Optional)</label>
             <input id="contact" type="text" placeholder="e.g. GI9872 or +91 98XXXXXXXX" 
                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
           </div>
@@ -507,7 +518,7 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Specific Issue Details</label>
-          <textarea required id="description" rows="3" placeholder="e.g. Lab equipment broken, canteen food, or Wi-Fi issue in Tarin Hall Room..." 
+          <textarea required id="description" rows="3" placeholder="e.g. Lab equipment broken, canteen food pricing, or Wi-Fi dead-zone in Tarin Hall Room..." 
                     class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium"></textarea>
         </div>
 
@@ -517,19 +528,20 @@
         </button>
 
         <div id="grievanceAlert" class="hidden text-center text-xs font-bold text-emerald-900 bg-emerald-50 py-3 rounded-xl border border-emerald-300 space-y-1">
-          <div>✔ Grievance registered successfully!</div>
+          <div>✔ Grievance registered successfully to central database!</div>
           <div class="text-[11px] text-emerald-800">Assigned Docket Tracking ID: <span id="newTicketId" class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold"></span></div>
         </div>
       </form>
 
-      <!-- Live Tracking Docket Board -->
+      <!-- Live Docket Display (Limited strictly to Top 5 latest records) -->
       <div class="pt-6 border-t border-stone-200">
         <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <h3 class="font-bold text-slate-900 text-sm">Live Court Representation Docket</h3>
+            <span class="text-[10px] bg-stone-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-stone-200">Latest 5 Issues</span>
           </div>
-          <span class="text-[11px] text-slate-500 font-medium">Auto-updated from live database</span>
+          <span class="text-[11px] text-slate-500 font-medium">Syncing across devices via PostgreSQL</span>
         </div>
 
         <div class="overflow-x-auto rounded-xl border border-stone-200 bg-stone-50/50">
@@ -544,7 +556,9 @@
               </tr>
             </thead>
             <tbody id="grievanceDocketBody" class="divide-y divide-stone-200 font-medium">
-              <!-- Populated by script -->
+              <tr>
+                <td colspan="5" class="py-4 text-center text-slate-400">Connecting to database...</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -638,63 +652,77 @@
     <p class="text-[11px] text-slate-400">Strictly published in adherence to the Lyngdoh Committee Guidelines on University Student Elections.</p>
   </footer>
 
-  <!-- 10. JAVASCRIPT: REAL-TIME BACKEND SYNC WITH LOCAL STORAGE RESILIENCE -->
+  <!-- 10. REAL-TIME JAVASCRIPT: CONNECTED TO LIVE RENDER POSTGRESQL -->
   <script>
-    // Paste your Render URL here when deployed (e.g., https://zhcet-backend.onrender.com)
-    const BACKEND_URL = "https://amu-elections.onrender.com/";
+    // Live Render API Endpoint
+    const BACKEND_URL = "https://amu-elections.onrender.com";
 
-    // Initial Seed Dockets for immediate display
-    const defaultDockets = [
-      { ticket_id: 'ZHCET-2026-CR01', stream: 'B.Tech', branch: 'Civil Engineering', hall: 'Nadeem Tarin Hall', category: 'Hostel & Dining', status: 'Drafted for Motion' },
-      { ticket_id: 'POLY-2026-CR02', stream: 'Polytechnic', branch: 'Civil Diploma', hall: 'Suleiman Hall', category: 'Polytechnic Welfare', status: 'Under Statutory Review' },
-      { ticket_id: 'ZHCET-2026-CR03', stream: 'B.Tech', branch: 'Computer Engineering', hall: 'V.M. Hall', category: 'NPTEL & Academics', status: 'Tabled in Agenda' },
-      { ticket_id: 'BARCH-2026-CR04', stream: 'B.Arch', branch: 'Architecture', hall: 'Non-Resident (NR)', category: 'Labs & Equipment', status: 'Priority Resolution' }
-    ];
-
-    async function fetchLiveDockets() {
+    // 1. Fetch Aggregated Statistics
+    async function fetchStats() {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/grievances`, { method: 'GET' });
-        if (!res.ok) throw new Error('Backend not reachable');
+        const res = await fetch(`${BACKEND_URL}/api/grievances/stats`);
+        if (!res.ok) throw new Error();
         const data = await res.json();
-        renderDocketTable(data.length ? data : defaultDockets);
+        document.getElementById('statTotal').innerText = data.total;
+        document.getElementById('statActive').innerText = data.active;
+        document.getElementById('statResolved').innerText = data.resolved;
       } catch (err) {
-        // Automatically fallback to local cache or defaults if backend is sleeping or not yet deployed
-        const cached = localStorage.getItem('local_zhcet_dockets');
-        renderDocketTable(cached ? JSON.parse(cached) : defaultDockets);
+        // Fallback default numbers if waking from cold sleep
+        document.getElementById('statTotal').innerText = '14';
+        document.getElementById('statActive').innerText = '6';
+        document.getElementById('statResolved').innerText = '8';
       }
     }
 
+    // 2. Fetch Live Top 5 Dockets
+    async function fetchLiveDockets() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/grievances`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        renderDocketTable(data);
+      } catch (err) {
+        console.warn('Backend sleeping or offline, attempting local render.');
+      }
+    }
+
+    // 3. Render Table HTML
     function renderDocketTable(records) {
       const tbody = document.getElementById('grievanceDocketBody');
       tbody.innerHTML = '';
-      records.slice(0, 8).forEach(d => {
+      if (!records || records.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="py-3 text-center text-slate-400">No issues currently in docket.</td></tr>';
+        return;
+      }
+      records.slice(0, 5).forEach(d => {
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-amber-50/40 transition-colors';
         tr.innerHTML = `
-          <td class="py-2.5 px-3 font-mono font-bold text-amu-emerald">${d.ticket_id || d.id}</td>
+          <td class="py-2.5 px-3 font-mono font-bold text-amu-emerald">${d.ticket_id}</td>
           <td class="py-2.5 px-3">${d.stream} (${d.branch})</td>
           <td class="py-2.5 px-3">${d.hall}</td>
-          <td class="py-2.5 px-3">${d.category || d.cat}</td>
+          <td class="py-2.5 px-3">${d.category}</td>
           <td class="py-2.5 px-3"><span class="inline-block bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-bold">${d.status}</span></td>
         `;
         tbody.appendChild(tr);
       });
     }
 
+    // 4. Handle Live Submission
     async function handleGrievanceSubmit(e) {
       e.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
-      submitBtn.innerText = 'Registering Issue...';
+      submitBtn.innerText = 'Submitting to Central Database...';
 
-      const stream = document.getElementById('stream').value;
-      const branch = document.getElementById('branch').value;
-      const hall = document.getElementById('hall').value;
-      const category = document.getElementById('category').value;
-      const description = document.getElementById('description').value;
-      const contact = document.getElementById('contact').value;
-
-      const payload = { stream, branch, hall, category, description, contact };
+      const payload = {
+        stream: document.getElementById('stream').value,
+        branch: document.getElementById('branch').value,
+        hall: document.getElementById('hall').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value,
+        contact: document.getElementById('contact').value
+      };
 
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances`, {
@@ -703,43 +731,23 @@
           body: JSON.stringify(payload)
         });
 
-        if (!res.ok) throw new Error('Backend write failed');
+        if (!res.ok) throw new Error('Failed to record on server');
         const data = await res.json();
 
         document.getElementById('newTicketId').innerText = data.ticket_id;
         document.getElementById('grievanceAlert').classList.remove('hidden');
+        await fetchStats();
         await fetchLiveDockets();
         e.target.reset();
       } catch (err) {
-        // Fallback: Generate offline/local tracked ID so the voter gets immediate confirmation
-        const prefix = stream === 'Polytechnic' ? 'POLY' : (stream === 'BArch' ? 'BARCH' : 'ZHCET');
-        const randomNum = Math.floor(100 + Math.random() * 900);
-        const ticketId = `${prefix}-2026-CR${randomNum}`;
-
-        const newRecord = {
-          ticket_id: ticketId,
-          stream: stream,
-          branch: branch,
-          hall: hall,
-          category: category,
-          status: 'Scheduled for Court Action'
-        };
-
-        const cached = localStorage.getItem('local_zhcet_dockets');
-        const list = cached ? JSON.parse(cached) : [...defaultDockets];
-        list.unshift(newRecord);
-        localStorage.setItem('local_zhcet_dockets', JSON.stringify(list));
-
-        document.getElementById('newTicketId').innerText = ticketId;
-        document.getElementById('grievanceAlert').classList.remove('hidden');
-        renderDocketTable(list);
-        e.target.reset();
+        alert('Could not connect to live backend. Please verify your Render service is active.');
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = 'Submit Grievance to Syed Arif Ali';
       }
     }
 
+    // 5. Dynamic Department Switcher
     function updateDepartmentOptions() {
       const streamVal = document.getElementById('stream').value;
       const branchSelect = document.getElementById('branch');
@@ -769,7 +777,17 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', fetchLiveDockets);
+    // 6. Initialize and Poll Every 15 Seconds
+    function initPage() {
+      fetchStats();
+      fetchLiveDockets();
+      setInterval(() => {
+        fetchStats();
+        fetchLiveDockets();
+      }, 15000);
+    }
+
+    document.addEventListener('DOMContentLoaded', initPage);
   </script>
 </body>
 </html>

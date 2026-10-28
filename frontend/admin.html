@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Grievance Control Room | Syed Arif Ali Campaign</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-100 text-slate-800 p-4 sm:p-8">
+
+  <div class="max-w-6xl mx-auto space-y-6">
+    
+    <!-- Top Header -->
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <span class="text-xs font-bold text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
+          Confidential Campaign Desk
+        </span>
+        <h1 class="text-2xl font-bold text-slate-900 mt-1">Syed Arif Ali — Grievance Resolution Portal</h1>
+        <p class="text-xs text-slate-500">Live PostgreSQL Database View • AMUSU Elections 2026</p>
+      </div>
+      <button onclick="fetchAllGrievances()" class="bg-[#064426] hover:bg-[#032115] text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
+        <span>🔄</span>
+        <span>Refresh Feed</span>
+      </button>
+    </div>
+
+    <!-- Issues Table -->
+    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
+      <div class="p-4 border-b border-stone-200 bg-stone-50 font-bold text-xs text-slate-700 flex justify-between items-center">
+        <span>All Recorded Grievances (<span id="totalCount">0</span>)</span>
+        <span class="text-[11px] text-slate-500">Updates sync to the public site immediately</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-700">
+          <thead class="bg-stone-100 uppercase text-[10px] tracking-wider text-slate-600 border-b border-stone-200">
+            <tr>
+              <th class="py-3 px-4">Ticket</th>
+              <th class="py-3 px-4">Student & Stream</th>
+              <th class="py-3 px-4">Hall</th>
+              <th class="py-3 px-4">Issue Details</th>
+              <th class="py-3 px-4">Current Status</th>
+              <th class="py-3 px-4">Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminTableBody" class="divide-y divide-stone-200 font-medium">
+            <tr><td colspan="6" class="py-8 text-center text-slate-400">Loading issues...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const BACKEND_URL = "https://amu-elections.onrender.com";
+
+    async function fetchAllGrievances() {
+      const tbody = document.getElementById('adminTableBody');
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/grievances/admin-all`);
+        if (!res.ok) throw new Error('API failure');
+        const data = await res.json();
+        document.getElementById('totalCount').innerText = data.length;
+        renderAdminTable(data);
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Failed to connect to Render database. Check your internet connection.</td></tr>';
+      }
+    }
+
+    function renderAdminTable(records) {
+      const tbody = document.getElementById('adminTableBody');
+      tbody.innerHTML = '';
+      if (!records.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-slate-400">No issues recorded yet.</td></tr>';
+        return;
+      }
+
+      records.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-stone-50 transition-colors';
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono font-bold text-[#064426]">${r.ticket_id}</td>
+          <td class="py-3 px-4">
+            <div class="font-bold text-slate-900">${r.stream}</div>
+            <div class="text-[11px] text-slate-500">${r.branch}</div>
+            <div class="text-[11px] text-emerald-700 font-mono font-bold">${r.contact || 'No contact provided'}</div>
+          </td>
+          <td class="py-3 px-4">${r.hall}</td>
+          <td class="py-3 px-4 max-w-xs">
+            <div class="font-bold text-amber-900 text-[11px]">${r.category}</div>
+            <div class="text-slate-600 line-clamp-3">${r.description}</div>
+          </td>
+          <td class="py-3 px-4">
+            <span class="inline-block bg-amber-100 text-amber-900 text-[10px] px-2.5 py-1 rounded-full font-bold">
+              ${r.status}
+            </span>
+          </td>
+          <td class="py-3 px-4 space-y-1.5">
+            <select onchange="updateStatus('${r.ticket_id}', this.value)" class="text-[11px] bg-white border border-stone-300 rounded px-2 py-1 font-medium focus:outline-none focus:border-emerald-600">
+              <option value="">Update Status...</option>
+              <option value="Scheduled for Court Action">Scheduled for Court</option>
+              <option value="Tabled in Court Agenda">Tabled in Court Agenda</option>
+              <option value="Under Statutory Review">Under Review</option>
+              <option value="Resolved / Redressed">Mark Resolved ✔</option>
+            </select>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function updateStatus(ticketId, newStatus) {
+      if (!newStatus) return;
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/grievances/${ticketId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (!res.ok) throw new Error();
+        fetchAllGrievances();
+      } catch (err) {
+        alert('Failed to update status on server.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchAllGrievances);
+  </script>
+</body>
+</html>
