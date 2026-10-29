@@ -52,18 +52,57 @@
 </head>
 <body class="bg-amu-ivory text-amu-slate antialiased selection:bg-amu-emerald selection:text-white relative blueprint-bg overflow-x-hidden">
 
-  <!-- 1. TOP LIVE ELECTION ANNOUNCEMENT BANNER -->
-  <aside class="bg-gradient-to-r from-amu-dark via-amu-emerald to-amu-dark text-slate-100 text-xs sm:text-sm py-2.5 px-4 border-b border-amber-500/20 shadow-sm relative z-50">
-    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3 flex-wrap">
-      <div class="flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="font-bold text-white tracking-wide">AMUSU General Elections 2026</span>
-        <span class="text-slate-300 hidden sm:inline">• Faculty of Engineering & Technology (ZHCET)</span>
+  <!-- 1. TOP LIVE ELECTION ANNOUNCEMENT BANNER WITH COUNTDOWN -->
+  <!-- 1. TOP LIVE ELECTION ANNOUNCEMENT BANNER WITH ENLARGED COUNTDOWN -->
+  <aside class="bg-gradient-to-r from-amu-dark via-amu-emerald to-amu-dark text-slate-100 py-3 sm:py-3.5 px-4 border-b border-amber-500/30 shadow-md relative z-50">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-4 flex-wrap">
+      
+      <!-- Election Meta -->
+      <div class="flex items-center gap-2.5">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+        </span>
+        <div>
+          <span class="font-extrabold text-white text-xs sm:text-sm tracking-wide">AMUSU Elections 2026</span>
+          <span class="text-stone-300 text-xs hidden sm:inline">• ZHCET & University Polytechnic</span>
+        </div>
       </div>
-      <div class="text-xs text-amber-300 font-semibold tracking-wide flex items-center gap-2">
-        <span>📅 Polling Date:</span>
-        <strong class="text-white bg-white/10 px-2.5 py-0.5 rounded border border-white/20">Thursday, 5 November 2026</strong>
+
+      <!-- Large Prominent Countdown Module -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-1.5 text-xs font-bold text-amber-300 uppercase tracking-wider">
+          <span class="text-base">🗳️</span>
+          <span>Polling Opens In:</span>
+        </div>
+
+        <div id="electionCountdown" class="flex items-center gap-1.5 sm:gap-2 text-center font-mono">
+          <!-- Days -->
+          <div class="bg-black/50 border border-white/20 rounded-lg px-2.5 sm:px-3 py-1 shadow-inner min-w-[42px] sm:min-w-[50px]">
+            <div id="timerDays" class="text-sm sm:text-lg font-black text-white leading-tight">--</div>
+            <div class="text-[9px] text-stone-400 uppercase font-sans font-bold tracking-tighter">Days</div>
+          </div>
+          <span class="text-amber-400 font-bold text-sm">:</span>
+          <!-- Hours -->
+          <div class="bg-black/50 border border-white/20 rounded-lg px-2.5 sm:px-3 py-1 shadow-inner min-w-[42px] sm:min-w-[50px]">
+            <div id="timerHours" class="text-sm sm:text-lg font-black text-white leading-tight">--</div>
+            <div class="text-[9px] text-stone-400 uppercase font-sans font-bold tracking-tighter">Hours</div>
+          </div>
+          <span class="text-amber-400 font-bold text-sm">:</span>
+          <!-- Minutes -->
+          <div class="bg-black/50 border border-white/20 rounded-lg px-2.5 sm:px-3 py-1 shadow-inner min-w-[42px] sm:min-w-[50px]">
+            <div id="timerMins" class="text-sm sm:text-lg font-black text-white leading-tight">--</div>
+            <div class="text-[9px] text-stone-400 uppercase font-sans font-bold tracking-tighter">Mins</div>
+          </div>
+          <span class="text-amber-400 font-bold text-sm">:</span>
+          <!-- Seconds -->
+          <div class="bg-black/50 border border-amber-400/30 rounded-lg px-2.5 sm:px-3 py-1 shadow-inner min-w-[42px] sm:min-w-[50px]">
+            <div id="timerSecs" class="text-sm sm:text-lg font-black text-amber-300 leading-tight">--</div>
+            <div class="text-[9px] text-amber-400/80 uppercase font-sans font-bold tracking-tighter">Secs</div>
+          </div>
+        </div>
       </div>
+
     </div>
   </aside>
 
@@ -1054,6 +1093,42 @@
     }
 
     document.addEventListener('DOMContentLoaded', initPage);
+
+    // Countdown Timer Target: 5 November 2026, 09:00:00 IST (+05:30)
+    const POLLING_TIMESTAMP = new Date('2026-11-05T09:00:00+05:30').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = POLLING_TIMESTAMP - now;
+
+      const daysEl = document.getElementById('timerDays');
+      const hoursEl = document.getElementById('timerHours');
+      const minsEl = document.getElementById('timerMins');
+      const secsEl = document.getElementById('timerSecs');
+
+      if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+      if (distance <= 0) {
+        document.getElementById('electionCountdown').innerHTML = 
+          '<span class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl font-bold uppercase tracking-wider text-xs animate-pulse">Voting Live Now</span>';
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      daysEl.innerText = String(days);
+      hoursEl.innerText = String(hours).padStart(2, '0');
+      minsEl.innerText = String(minutes).padStart(2, '0');
+      secsEl.innerText = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
   </script>
+
 </body>
 </html>
