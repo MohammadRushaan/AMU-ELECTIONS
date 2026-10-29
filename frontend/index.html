@@ -431,7 +431,7 @@
                 <span>The Court Action Syed Will Force:</span>
               </div>
               <p class="leading-relaxed">
-                Mandate a scheduled <strong>evening electric shuttle loop connecting ZHCET to SN and Bibi Fatima Halls</strong>, backed by immediate Proctorial installation of solar lighting along unlit lab pathways.
+                Coordinate with the Proctor's Office to <strong>extend university campus e-rickshaw routes up to 9:30 PM</strong> connecting ZHCET directly to Sarojini Naidu (SN) and Bibi Fatima Halls, alongside an immediate audit and repair of non-functional streetlights along the Purani Chungi–Faculty pathway.
               </p>
             </div>
           </div>
@@ -447,7 +447,7 @@
           <div class="space-y-3">
             <div class="flex justify-between items-center text-xs">
               <span class="font-mono text-amu-copper font-black text-sm">PILLAR 06</span>
-              <span class="bg-stone-200/80 text-slate-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">Technical Teams & BAJA</span>
+              <span class="bg-stone-200/80 text-slate-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">SAE Club, Robotics & Capstone Teams</span>
             </div>
             
             <h3 class="text-xl font-display font-black text-slate-900 leading-snug">
@@ -460,7 +460,7 @@
                 <span>The Harsh Reality Today:</span>
               </div>
               <p class="leading-relaxed">
-                Engineering teams representing AMU at BAJA, Formula Student, and national robotics hackathons beg for small departmental sponsorships while labs shut at 4 PM right when prototype builds begin.
+                Collegiate teams (SAE ZHCET, Formula, Robotics Club, drone developers) represent AMU nationally but struggle with out-of-pocket fabrication costs while departmental labs shut at 4 PM during build season.
               </p>
             </div>
 
@@ -751,12 +751,12 @@
 
         <button type="submit" id="submitBtn"
                 class="w-full bg-amu-emerald hover:bg-amu-deep text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-sm text-sm flex items-center justify-center gap-2">
-          <span>Table Issue on the Live Court Docket</span>
+          <span>Table Issue on the Live Public Register</span>
         </button>
 
         <div id="grievanceAlert" class="hidden text-center text-xs font-bold text-emerald-900 bg-emerald-50 py-3 rounded-xl border border-emerald-300 space-y-1">
           <div>✔ Issue officially registered to the Court Representative's Docket!</div>
-          <div class="text-[11px] text-emerald-800">Your Official Ticket ID: <span id="newTicketId" class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold"></span></div>
+          <div class="text-[11px] text-emerald-800">Your Official Issue ID: <span id="newTicketId" class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold"></span></div>
         </div>
       </form>
 
@@ -765,8 +765,9 @@
         <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <h3 class="font-bold text-slate-900 text-sm">Live Court Representation Docket</h3>
-            <span class="text-[10px] bg-stone-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-stone-200">Latest 5 Issues</span>
+            <!-- After -->
+            <h3 class="font-bold text-slate-900 text-sm">Live Public Issue Register</h3>
+            <span class="text-[10px] bg-stone-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-stone-200">Latest 5 Entries</span>
           </div>
           <span class="text-[11px] text-slate-500 font-medium">Live public register • Automatically synced across campus</span>
         </div>
@@ -954,8 +955,9 @@
     function renderDocketTable(records) {
       const tbody = document.getElementById('grievanceDocketBody');
       tbody.innerHTML = '';
+      // Replace instances of 'docket'
       if (!records || records.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">No issues currently in docket. Be the first to table a motion.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">No issues registered yet. Be the first to submit a concern.</td></tr>';
         return;
       }
       records.slice(0, 5).forEach(d => {
