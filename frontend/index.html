@@ -9,7 +9,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=Noto+Nastaliq+Urdu:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Noto+Nastaliq+Urdu:wght@700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -18,6 +18,7 @@
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
             urdu: ['"Noto Nastaliq Urdu"', 'serif'],
           },
           colors: {
@@ -27,28 +28,29 @@
               dark: '#01150c',
               gold: '#c5933c',
               goldHover: '#b38230',
-              goldLight: '#f6be65',
-              ivory: '#fbfaf6',
+              copper: '#b45309',
+              ivory: '#faf9f5',
               card: '#ffffff',
               slate: '#0f172a'
             }
           },
-          boxShadow: {
-            'soft': '0 10px 30px -5px rgba(6, 68, 38, 0.08), 0 4px 12px rgba(0,0,0,0.03)',
-            'card-hover': '0 18px 38px -8px rgba(6, 68, 38, 0.16)',
-            'glow-emerald': '0 12px 30px -5px rgba(6, 68, 38, 0.35)'
+          backgroundImage: {
+            'grid-pattern': "radial-gradient(#064426 0.75px, transparent 0.75px)",
           }
         }
       }
     }
   </script>
+  <style>
+    .blueprint-bg {
+      background-size: 20px 20px;
+      background-image: 
+        linear-gradient(to right, rgba(6, 68, 38, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(6, 68, 38, 0.04) 1px, transparent 1px);
+    }
+  </style>
 </head>
-<body class="bg-amu-ivory text-amu-slate antialiased selection:bg-amu-emerald selection:text-white relative overflow-x-hidden">
-
-  <!-- Background Decorative Ambient Lighting -->
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-amber-100/50 via-emerald-50/40 to-transparent blur-3xl pointer-events-none -z-10"></div>
-  <div class="absolute top-[850px] -left-40 w-96 h-96 bg-emerald-100/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
-  <div class="absolute top-[1700px] -right-40 w-96 h-96 bg-amber-100/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<body class="bg-amu-ivory text-amu-slate antialiased selection:bg-amu-emerald selection:text-white relative blueprint-bg overflow-x-hidden">
 
   <!-- 1. TOP LIVE ELECTION ANNOUNCEMENT BANNER -->
   <aside class="bg-gradient-to-r from-amu-dark via-amu-emerald to-amu-dark text-slate-100 text-xs sm:text-sm py-2.5 px-4 border-b border-amber-500/20 shadow-sm relative z-50">
@@ -56,7 +58,7 @@
       <div class="flex items-center gap-2">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
         <span class="font-bold text-white tracking-wide">AMUSU General Elections 2026</span>
-        <span class="text-slate-300 hidden sm:inline">• Official Court Member Campaign</span>
+        <span class="text-slate-300 hidden sm:inline">• Faculty of Engineering & Technology (ZHCET)</span>
       </div>
       <div class="text-xs text-amber-300 font-semibold tracking-wide flex items-center gap-2">
         <span>📅 Polling Date:</span>
@@ -66,37 +68,40 @@
   </aside>
 
   <!-- 2. STICKY TOP NAVIGATION -->
-  <header class="sticky top-0 z-40 bg-amu-ivory/95 backdrop-blur-md border-b border-stone-200/80">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center">
+  <header class="sticky top-0 z-40 bg-amu-ivory/95 backdrop-blur-md border-b border-stone-200/90">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
       
-      <!-- University Emblem & Title -->
-      <a href="#" class="flex items-center gap-3.5 group">
-        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-full p-1 bg-white border border-stone-200 shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+      <!-- Emblem & Post -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-12 h-12 rounded-full p-1 bg-white border border-stone-200 shadow-sm flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
           <img src="assets/amu_logo.png" 
                onerror="this.onerror=null; this.src='assest/amu_logo.png';" 
                alt="AMU Emblem" 
                class="w-full h-full object-contain">
         </div>
         <div>
-          <span class="block text-[11px] font-bold uppercase tracking-wider text-amu-emerald">Faculty of Engg. & Technology</span>
-          <span class="block text-sm sm:text-base font-bold text-slate-900 leading-tight">ZHCET • AMU Aligarh</span>
+          <span class="block text-[10px] font-bold uppercase tracking-wider text-amu-emerald">Statutory Representation</span>
+          <span class="block text-sm sm:text-base font-extrabold text-slate-900 leading-tight">Syed Arif Ali • AMU Court</span>
         </div>
       </a>
 
-      <!-- Quick Action Badges -->
-      <div class="flex items-center gap-3">
-        <div class="flex items-center gap-2 bg-white border border-amber-900/15 px-3.5 py-1.5 rounded-full text-xs text-slate-700 font-semibold shadow-sm">
+      <!-- Quick Action Navigation -->
+      <div class="flex items-center gap-2.5 sm:gap-4">
+        <a href="#grievance" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-amu-emerald hover:text-amu-deep bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-xl transition-all">
+          <span>⚡ Live Grievance Desk</span>
+        </a>
+
+        <div class="flex items-center gap-1.5 bg-white border border-stone-200 px-3 py-1.5 rounded-xl text-xs text-slate-700 font-semibold shadow-sm">
           <span class="w-2 h-2 rounded-full bg-amu-gold animate-pulse"></span>
-          <span>Ballot Serial: <strong class="text-amu-emerald">Awaited</strong></span>
+          <span>Ballot: <strong class="text-amu-emerald">Awaited</strong></span>
         </div>
 
-        <!-- WhatsApp Quick Share -->
-        <a href="https://api.whatsapp.com/send?text=Support%20Syed%20Arif%20Ali%20(Final%20year%20Civil)%20for%20COURT%20MEMBER%20(Faculty%20of%20Engg%20%26%20Tech)%20in%20AMU%20Union%20Elections%202026.%20Download%20the%20official%20manifestos:%20https://syed-arif-ali-court-member.vercel.app" 
+        <a href="https://api.whatsapp.com/send?text=I%20am%20supporting%20Syed%20Arif%20Ali%20(Final%20Year%20Civil,%20ZHCET)%20for%20COURT%20MEMBER%20in%20AMUSU%20Elections%202026.%20A%20proven%20voice%20for%20hostel%20rights,%20labs,%20and%20transparent%20governance!%20Explore%20the%20platform%20and%20table%20your%20issues:%20https://syed-arif-ali-court-member.vercel.app" 
            target="_blank" 
            rel="noopener noreferrer"
-           class="bg-[#25D366] text-white hover:bg-[#1ebd5a] px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-sm hover:scale-105">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-          <span class="hidden sm:inline">Share</span>
+           class="bg-[#25D366] text-white hover:bg-[#1ebd5a] px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+          <span class="hidden md:inline">Endorse</span>
         </a>
       </div>
     </div>
@@ -104,105 +109,106 @@
 
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-14 space-y-16 sm:space-y-24">
 
-    <!-- 3. HERO CANDIDATE BANNER -->
+    <!-- 3. HERO: TELLING THE TRUTH & GIVING HOPE -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
       
-      <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
-        <div class="inline-flex items-center gap-2 bg-emerald-50 text-amu-emerald border border-emerald-200 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-sm">
-          <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-          <span>AMU Students' Union Elections 2026</span>
+      <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+        
+        <div class="inline-flex items-center gap-2 bg-stone-900 text-amber-300 border border-stone-800 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-amu-gold animate-ping"></span>
+          <span>AMU COURT MEMBER NOMINEE • 2026</span>
         </div>
 
-        <div class="space-y-1">
-          <div class="text-xs uppercase tracking-widest text-amu-gold font-bold">
-            Candidate for Supreme Statutory Governing Body
-          </div>
+        <div class="space-y-2">
           <h1 class="text-4xl sm:text-6xl font-display font-black text-slate-900 tracking-tight leading-[1.05]">
-            COURT <span class="text-amu-emerald">MEMBER</span>
+            A Court Member Who <span class="text-amu-emerald underline decoration-amu-gold decoration-4 underline-offset-4">Listens</span>.<br>
+            A Record You Can <span class="text-amu-copper">Inspect</span>.
           </h1>
-          <div class="text-2xl sm:text-3xl font-extrabold text-slate-800 pt-1">
-            Syed Arif Ali
-          </div>
-          <div class="text-sm sm:text-base text-slate-600 font-medium">
-            <span class="inline-block bg-amu-gold/20 text-amber-900 font-bold px-3 py-0.5 rounded-md">Final year Civil</span>
-            <span class="mx-1">•</span>
-            <span>Faculty of Engineering & Technology (ZHCET)</span>
-          </div>
+          <p class="text-lg sm:text-xl font-bold text-slate-700 pt-1">
+            Beyond flowery speeches. Engineering real institutional accountability for ZHCET.
+          </p>
         </div>
 
-        <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0 font-normal">
-          Advancing <strong>engineering precision</strong>, infrastructure budget advocacy, 24/7 technical labs, and comprehensive hostel reforms in AMU’s supreme decision-making council.
+        <p class="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
+          The AMU Court is not a poetry podium; it is the <strong>Supreme Statutory Authority (Section 22, AMU Act)</strong> where university budgets are sanctioned and policies audited. Elect a final-year engineer who understands structural planning, demands transparent dining audits, and provides a real docket for every student issue.
         </p>
 
-        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-          <div class="w-full sm:w-auto bg-gradient-to-r from-amu-deep to-amu-emerald text-white px-6 py-3.5 rounded-2xl flex items-center justify-center gap-3.5 shadow-glow-emerald border border-emerald-700/30">
-            <span class="text-2xl">🗳️</span>
-            <div class="text-left">
-              <div class="text-[10px] uppercase tracking-wider text-amber-300 font-bold">Election Day</div>
-              <div class="text-sm sm:text-base font-bold">Ballot Serial Awaited (5 Nov 2026)</div>
-            </div>
-          </div>
+        <!-- Primary Action Triggers -->
+        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
+          <a href="#grievance" 
+             class="w-full sm:w-auto bg-amu-emerald hover:bg-amu-deep text-white px-6 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-950/20 transition-all hover:scale-102">
+            <span>⚡</span>
+            <span>Table an Issue on the Docket</span>
+          </a>
 
           <a href="#manifestos" 
-             class="w-full sm:w-auto bg-white hover:bg-amber-50/50 border border-stone-300 text-slate-800 px-5 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-sm hover:scale-105">
+             class="w-full sm:w-auto bg-white hover:bg-stone-50 border border-stone-300 text-slate-800 px-5 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all">
             <span>📄</span>
-            <span>Download Official Manifestos (PDF)</span>
+            <span>Download Verified Manifestos</span>
           </a>
         </div>
+
+        <!-- 3 Pillars Trust Micro-Strip -->
+        <div class="pt-2 grid grid-cols-3 gap-2 border-t border-stone-200 text-center max-w-lg mx-auto lg:mx-0 text-xs">
+          <div class="py-2">
+            <div class="font-black text-slate-900 font-mono text-sm">ZERO</div>
+            <div class="text-[11px] text-slate-500 font-medium">Empty Slogans</div>
+          </div>
+          <div class="py-2 border-x border-stone-200">
+            <div class="font-black text-amu-emerald font-mono text-sm">SEC. 22</div>
+            <div class="text-[11px] text-slate-500 font-medium">Statutory Power</div>
+          </div>
+          <div class="py-2">
+            <div class="font-black text-amu-copper font-mono text-sm">100%</div>
+            <div class="text-[11px] text-slate-500 font-medium">Tracked Actions</div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Improvised Candidate Showcase Card -->
+      <!-- IMPROVISED CANDIDATE CARD -->
       <div class="lg:col-span-5 flex justify-center">
         <div class="relative w-full max-w-sm">
           
-          <!-- Layered Ambient Glow -->
-          <div class="absolute -inset-2.5 bg-gradient-to-tr from-amu-emerald via-amu-gold to-emerald-600 rounded-[2.5rem] blur-xl opacity-30 animate-pulse"></div>
+          <div class="absolute -inset-2 bg-gradient-to-tr from-amu-emerald via-amu-gold to-amber-600 rounded-3xl blur-xl opacity-20 animate-pulse"></div>
           
-          <div class="relative bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-[2rem] border border-stone-200 shadow-xl text-center space-y-4">
+          <div class="relative bg-white/95 backdrop-blur-sm p-5 rounded-3xl border border-stone-300 shadow-xl text-center space-y-4">
             
-            <!-- Candidate Photo Frame with AMU Accents -->
             <div class="w-full h-84 sm:h-96 rounded-2xl overflow-hidden border border-emerald-900/10 bg-gradient-to-b from-stone-50 via-emerald-50/20 to-stone-100 flex items-end justify-center relative shadow-inner group">
               
-              <!-- Floating Top Badges -->
-              <div class="absolute top-3.5 left-3.5 bg-amu-deep/90 backdrop-blur-md text-amber-300 text-[10px] uppercase tracking-wider px-3 py-1 rounded-full font-extrabold border border-amber-400/30 shadow-sm flex items-center gap-1.5">
+              <div class="absolute top-3 left-3 bg-amu-deep/90 backdrop-blur-md text-amber-300 text-[10px] uppercase tracking-wider px-3 py-1 rounded-full font-extrabold border border-amber-400/30 flex items-center gap-1.5 shadow-sm">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                AMU Court 2026
+                ZHCET Civil '26
               </div>
 
-              <div class="absolute top-3.5 right-3.5 bg-amu-emerald text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
+              <div class="absolute top-3 right-3 bg-amu-emerald text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
                 Nominee
               </div>
 
-              <!-- Candidate Image with Zoom Hover Effect -->
               <img src="assets/candidate.png" 
                    onerror="this.onerror=null; this.src='assest/candidate.png';" 
                    alt="Syed Arif Ali - Candidate for Court Member" 
                    class="w-full h-full object-contain object-bottom transition-transform duration-500 group-hover:scale-105 drop-shadow-md">
             </div>
             
-            <!-- Candidate Title & Credentials -->
-            <div class="space-y-1.5 pt-1">
+            <div class="space-y-1 pt-1">
               <h3 class="font-display font-black text-slate-900 text-2xl tracking-tight">Syed Arif Ali</h3>
-              <div class="text-xs font-extrabold text-amu-gold uppercase tracking-wider flex items-center justify-center gap-2">
-                <span>Final Year</span>
-                <span class="w-1 h-1 rounded-full bg-amu-gold"></span>
-                <span>Civil Engineering</span>
+              <div class="text-xs font-extrabold text-amu-copper uppercase tracking-wider">
+                Final Year Civil Engineering
               </div>
-              <div class="text-xs text-slate-500 font-medium">Faculty of Engineering & Technology (ZHCET)</div>
+              <div class="text-xs text-slate-500 font-medium">Faculty of Engineering & Technology, AMU</div>
               
-              <!-- Credential Pills -->
               <div class="flex items-center justify-center gap-1.5 pt-2 flex-wrap text-[10px] font-bold text-slate-600">
-                <span class="bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-md">ZHCET Civil</span>
-                <span class="bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-md">Section 22 Mandate</span>
-                <span class="bg-emerald-50 text-amu-emerald border border-emerald-200 px-2 py-0.5 rounded-md">Peer Representative</span>
+                <span class="bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-md">Infrastructure Audit</span>
+                <span class="bg-stone-100 border border-stone-200 px-2 py-0.5 rounded-md">Hostel Rights</span>
+                <span class="bg-emerald-50 text-amu-emerald border border-emerald-200 px-2 py-0.5 rounded-md">Direct Accountability</span>
               </div>
             </div>
 
-            <!-- Election Commission Seal -->
-            <div class="pt-3 border-t border-stone-100 flex items-center justify-center gap-2 text-xs text-emerald-800 font-bold bg-emerald-50/50 py-2 rounded-xl border border-emerald-100">
-              <span class="relative flex h-2.5 w-2.5">
+            <div class="pt-3 border-t border-stone-100 flex items-center justify-center gap-2 text-xs text-emerald-800 font-bold bg-emerald-50/60 py-2 rounded-xl border border-emerald-200">
+              <span class="relative flex h-2 w-2">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
               </span>
               <span>Election Commission Validated Candidate</span>
             </div>
@@ -213,18 +219,326 @@
 
     </section>
 
-    <!-- 4. OFFICIAL MANIFESTO DOWNLOAD CARDS SECTION -->
+    <!-- 4. "NOW -> THEN" MANIFESTO: SCANNABLE, CONCRETE & FILTERABLE -->
+    <section id="manifesto-grid" class="space-y-6">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="inline-block bg-amu-gold/20 text-amber-900 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+          Actionable Roadmap
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-display font-black text-slate-900">
+          The Ground Agenda: Now → Then
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600">
+          We do not speak in vague promises. Here is what exists today, what will be tabled in the Court, and the exact administrative route to achieve it.
+        </p>
+
+        <!-- Category Filters -->
+        <div class="flex items-center justify-center gap-2 pt-2 flex-wrap text-xs font-bold">
+          <button onclick="filterManifesto('all')" class="filter-btn active bg-slate-900 text-white px-3.5 py-1.5 rounded-full transition-all">All Pillars</button>
+          <button onclick="filterManifesto('hostels')" class="filter-btn bg-white text-slate-700 border border-stone-300 hover:bg-stone-100 px-3.5 py-1.5 rounded-full transition-all">Hostels & Dining</button>
+          <button onclick="filterManifesto('placements')" class="filter-btn bg-white text-slate-700 border border-stone-300 hover:bg-stone-100 px-3.5 py-1.5 rounded-full transition-all">TPO & Careers</button>
+          <button onclick="filterManifesto('academics')" class="filter-btn bg-white text-slate-700 border border-stone-300 hover:bg-stone-100 px-3.5 py-1.5 rounded-full transition-all">Labs & NPTEL</button>
+          <button onclick="filterManifesto('safety')" class="filter-btn bg-white text-slate-700 border border-stone-300 hover:bg-stone-100 px-3.5 py-1.5 rounded-full transition-all">Safety & Transit</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+
+        <!-- Item 1: Placements & Careers -->
+        <div class="manifesto-card placements bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-amu-copper/40 transition-all">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-mono text-amu-copper font-black text-sm">PILLAR 01</span>
+              <span class="bg-amber-100/70 text-amber-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">Core Placements & TPO</span>
+            </div>
+            
+            <h3 class="text-xl font-display font-black text-slate-900 leading-snug">
+              "Civil, Mechanical & Chemical Students Deserve Core Companies, Not Excuses."
+            </h3>
+            
+            <!-- Ground Reality (Now) -->
+            <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200/60 text-xs text-rose-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-rose-800">
+                <span>⚠️</span>
+                <span>The Harsh Reality Today:</span>
+              </div>
+              <p class="leading-relaxed">
+                While IT firms recruit selected branches, core engineering students pay the same tuition fees only to find zero Tier-1 infrastructure recruiters on campus, forcing graduates into underpaid off-campus hustles.
+              </p>
+            </div>
+
+            <!-- Statutory Action (Then) -->
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/60 text-xs text-emerald-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-emerald-800">
+                <span>✅</span>
+                <span>The Court Action Syed Will Force:</span>
+              </div>
+              <p class="leading-relaxed">
+                Tie central placement funding in the AMU Court to <strong>mandatory corporate outreach MoUs</strong> with giants like L&T, Tata Projects, Afcons, and PSUs, with transparent shortlisting published on public noticeboards.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><strong>Target:</strong> Core On-Campus Drives</span>
+            <span class="text-amu-emerald font-bold">100% Trackable</span>
+          </div>
+        </div>
+
+        <!-- Item 2: Hostels & Dining -->
+        <div class="manifesto-card hostels bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-amu-copper/40 transition-all">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-mono text-amu-copper font-black text-sm">PILLAR 02</span>
+              <span class="bg-emerald-100/70 text-emerald-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">Hostels & Dining Rights</span>
+            </div>
+            
+            <h3 class="text-xl font-display font-black text-slate-900 leading-snug">
+              "No More Paying Arbitrary Mess Deficits Without Line-Item Accounts."
+            </h3>
+            
+            <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200/60 text-xs text-rose-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-rose-800">
+                <span>⚠️</span>
+                <span>The Harsh Reality Today:</span>
+              </div>
+              <p class="leading-relaxed">
+                Sudden extra mess bills hit student wallets with zero itemized auditing. Meanwhile, final-year scholars preparing for GATE, CAT, and ESE are forced into cramped 3-seater rooms without quiet study space.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/60 text-xs text-emerald-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-emerald-800">
+                <span>✅</span>
+                <span>The Court Action Syed Will Force:</span>
+              </div>
+              <p class="leading-relaxed">
+                Invoke Section 22 Court inspection rights to <strong>mandate monthly balance sheets</strong> before any deficit can be debited, and guarantee seniority-based single-seater room allotments in Tarin, Morrison, and Suleiman Halls.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><strong>Target:</strong> Transparent Mess & Single Rooms</span>
+            <span class="text-amu-emerald font-bold">Audited Monthly</span>
+          </div>
+        </div>
+
+        <!-- Item 3: Academics & NPTEL -->
+        <div class="manifesto-card academics bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-amu-copper/40 transition-all">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-mono text-amu-copper font-black text-sm">PILLAR 03</span>
+              <span class="bg-blue-100/70 text-blue-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">NPTEL & Exam Stress</span>
+            </div>
+            
+            <h3 class="text-xl font-display font-black text-slate-900 leading-snug">
+              "Stop Forcing Students to Travel Off-Campus for NPTEL Exams."
+            </h3>
+            
+            <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200/60 text-xs text-rose-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-rose-800">
+                <span>⚠️</span>
+                <span>The Harsh Reality Today:</span>
+              </div>
+              <p class="leading-relaxed">
+                ZHCET students waste money and risk safety traveling to remote private test centers across district borders for mandatory NPTEL papers, while our own departmental computer facilities sit locked and underutilized.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/60 text-xs text-emerald-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-emerald-800">
+                <span>✅</span>
+                <span>The Court Action Syed Will Force:</span>
+              </div>
+              <p class="leading-relaxed">
+                Statutory motion to certify <strong>ZHCET Computer Labs as an internal TCS iON exam nodal node</strong>, combined with a mandatory 48-hour gap between university semester theory exams.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><strong>Target:</strong> In-Campus NPTEL Testing</span>
+            <span class="text-amu-emerald font-bold">Zero Outside Travel</span>
+          </div>
+        </div>
+
+        <!-- Item 4: Polytechnic & Diploma Representation -->
+        <div class="manifesto-card academics bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-amu-copper/40 transition-all">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-mono text-amu-copper font-black text-sm">PILLAR 04</span>
+              <span class="bg-purple-100/70 text-purple-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">Polytechnic & Evening B.E.</span>
+            </div>
+            
+            <h3 class="text-xl font-display font-black text-slate-900 leading-snug">
+              "Diploma and Evening Scholars Are Not Second-Class Citizens."
+            </h3>
+            
+            <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200/60 text-xs text-rose-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-rose-800">
+                <span>⚠️</span>
+                <span>The Harsh Reality Today:</span>
+              </div>
+              <p class="leading-relaxed">
+                University Polytechnic students lack a proper functional Boys' Canteen and modern workshop tooling. Meanwhile, Evening B.E. working scholars find administrative windows closed during their academic shift.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/60 text-xs text-emerald-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-emerald-800">
+                <span>✅</span>
+                <span>The Court Action Syed Will Force:</span>
+              </div>
+              <p class="leading-relaxed">
+                Direct statutory land and budget allocation for the <strong>Boys' Polytechnic Canteen</strong>, and aligning administrative office working windows directly to 3:00 PM – 9:00 PM for B.E. scholars.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><strong>Target:</strong> Equal Faculty Dignity</span>
+            <span class="text-amu-emerald font-bold">Polytechnic Canteen</span>
+          </div>
+        </div>
+
+        <!-- Item 5: Women's Transit & Safety -->
+        <div class="manifesto-card safety bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-amu-copper/40 transition-all">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-mono text-amu-copper font-black text-sm">PILLAR 05</span>
+              <span class="bg-pink-100/70 text-pink-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">SN & Bibi Fatima Halls</span>
+            </div>
+            
+            <h3 class="text-xl font-display font-black text-slate-900 leading-snug">
+              "Late Labs and Research Must Not Depend on Dark Roads."
+            </h3>
+            
+            <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200/60 text-xs text-rose-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-rose-800">
+                <span>⚠️</span>
+                <span>The Harsh Reality Today:</span>
+              </div>
+              <p class="leading-relaxed">
+                Women engineers working late on project simulations face poorly lit stretches and zero evening transport returning to Sarojini Naidu (SN) and Bibi Fatima Halls, restricting their academic growth.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/60 text-xs text-emerald-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-emerald-800">
+                <span>✅</span>
+                <span>The Court Action Syed Will Force:</span>
+              </div>
+              <p class="leading-relaxed">
+                Mandate a scheduled <strong>evening electric shuttle loop connecting ZHCET to SN and Bibi Fatima Halls</strong>, backed by immediate Proctorial installation of solar lighting along unlit lab pathways.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><strong>Target:</strong> Safe Evening Shuttle</span>
+            <span class="text-amu-emerald font-bold">Guaranteed Transit</span>
+          </div>
+        </div>
+
+        <!-- Item 6: Capstone Funding & 24/7 Labs -->
+        <div class="manifesto-card academics bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between space-y-4 hover:border-amu-copper/40 transition-all">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-mono text-amu-copper font-black text-sm">PILLAR 06</span>
+              <span class="bg-stone-200/80 text-slate-900 px-2.5 py-0.5 rounded-full font-bold text-[11px]">Technical Teams & BAJA</span>
+            </div>
+            
+            <h3 class="text-xl font-display font-black text-slate-900 leading-snug">
+              "Stop Funding National Competition Hardware From Your Own Pocket."
+            </h3>
+            
+            <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200/60 text-xs text-rose-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-rose-800">
+                <span>⚠️</span>
+                <span>The Harsh Reality Today:</span>
+              </div>
+              <p class="leading-relaxed">
+                Engineering teams representing AMU at BAJA, Formula Student, and national robotics hackathons beg for small departmental sponsorships while labs shut at 4 PM right when prototype builds begin.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200/60 text-xs text-emerald-950 space-y-1">
+              <div class="font-extrabold flex items-center gap-1.5 text-emerald-800">
+                <span>✅</span>
+                <span>The Court Action Syed Will Force:</span>
+              </div>
+              <p class="leading-relaxed">
+                Sanction a dedicated university innovation grant of <strong>up to ₹30,000 for verified hardware capstone prototypes</strong>, along with round-the-clock biometric lab access during project season.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><strong>Target:</strong> Prototype Reimbursements</span>
+            <span class="text-amu-emerald font-bold">24/7 Lab Access</span>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- REALITY CHECK & RALLY CALL -->
+    <section class="bg-stone-900 text-white rounded-3xl p-6 sm:p-10 border border-stone-800 shadow-xl relative overflow-hidden">
+      <!-- Accent Glow -->
+      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-amu-emerald/40 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-3xl mx-auto space-y-6 text-center sm:text-left">
+        
+        <div class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+          <span>The True Choice on 5th November</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-4xl font-display font-black tracking-tight leading-tight">
+          "Speeches Don't Fix Water Coolers. <br class="hidden sm:inline">
+          Rhymes Don't Bring Core Companies to Campus."
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-stone-300 font-normal leading-relaxed pt-1">
+          <div class="bg-stone-800/60 p-4 rounded-2xl border border-stone-700/60 space-y-1">
+            <span class="font-bold text-red-400 block text-sm">The Familiar Campus Politics:</span>
+            Candidates who memorize Urdu couplets for the stage, disappear after election night, and leave students to beg provosts for basic geyser switches and lab repairs.
+          </div>
+          <div class="bg-emerald-950/40 p-4 rounded-2xl border border-emerald-500/30 space-y-1">
+            <span class="font-bold text-emerald-400 block text-sm">The Syed Arif Ali Alternative:</span>
+            An engineer who walks into the AMU Court with itemized budget audits, documented dockets, and the spine to demand what engineering and diploma students deserve.
+          </div>
+        </div>
+
+        <!-- Hall Callout Strip -->
+        <div class="pt-2 border-t border-stone-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="text-stone-400">
+            Standing firmly with scholars across: 
+            <span class="text-white font-bold">Nadeem Tarin • Suleiman • Ross Masood • Sarojini Naidu • Bibi Fatima</span>
+          </div>
+          <a href="#grievance" class="text-amber-400 hover:text-amber-300 font-bold inline-flex items-center gap-1 group">
+            <span>Log your hall issue now</span>
+            <span class="group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. OFFICIAL BILINGUAL MANIFESTO DOWNLOADS -->
     <section id="manifestos" class="scroll-mt-24 space-y-6">
       
       <div class="text-center max-w-2xl mx-auto space-y-2">
         <span class="inline-block bg-amu-gold/20 text-amber-900 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-          Official Campaign Literature
+          Official Documents
         </span>
-        <h2 class="text-2xl sm:text-4xl font-display font-black text-slate-900">
-          Download Election Manifestos
+        <h2 class="text-3xl sm:text-4xl font-display font-black text-slate-900">
+          Download Complete Manifestos
         </h2>
         <p class="text-xs sm:text-sm text-slate-600">
-          Print-ready, bilingual 2-page documents formulated with precise statutory solutions under Section 22 of the AMU Act.
+          Complete, 2-page print-ready editions featuring all 25+ ground agendas with statutory mandates under Section 22 of the AMU Act.
         </p>
       </div>
 
@@ -237,7 +551,7 @@
               <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-amu-emerald text-xs font-bold px-3 py-1 rounded-full">
                 <span>🇵🇰 / 🇬🇧</span> English & Urdu Edition
               </span>
-              <span class="text-xs text-slate-400 font-semibold">2 Pages • A4 PDF</span>
+              <span class="text-xs text-slate-400 font-semibold font-mono">2 Pages • A4 PDF</span>
             </div>
 
             <div>
@@ -250,11 +564,10 @@
             </div>
 
             <ul class="text-xs text-slate-600 space-y-1.5 border-t border-stone-100 pt-3">
-              <li>✔ <strong>On-Campus NPTEL Centre:</strong> Approved testing node directly inside ZHCET computer labs.</li>
-              <li>✔ <strong>Final-Year Single Rooms:</strong> Priority allotment across Nadeem Tarin, Morrison, Suleiman, and VM Halls.</li>
-              <li>✔ <strong>100% Mess Deficit Audit:</strong> End arbitrary pass-through charges via published balance sheets.</li>
-              <li>✔ <strong>₹30,000 Project Seed Grant:</strong> University reimbursement fund for capstone and project hardware.</li>
-              <li>✔ <strong>Polytechnic Facilities:</strong> Dedicated budget and space allocation for Boys' Polytechnic Canteen.</li>
+              <li>✔ <strong>On-Campus NPTEL Centre:</strong> Approved testing node inside ZHCET computer labs.</li>
+              <li>✔ <strong>Senior Single-Seaters:</strong> Seniority allotment across Tarin, Morrison, and Suleiman.</li>
+              <li>✔ <strong>100% Mess Deficit Audit:</strong> End arbitrary pass-through charges via published accounts.</li>
+              <li>✔ <strong>Capstone Seed Grant:</strong> University reimbursement fund for prototype hardware.</li>
             </ul>
           </div>
 
@@ -276,7 +589,7 @@
               <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 text-xs font-bold px-3 py-1 rounded-full">
                 <span>🇮🇳 / 🇬🇧</span> English & Hindi Edition
               </span>
-              <span class="text-xs text-slate-400 font-semibold">2 Pages • A4 PDF</span>
+              <span class="text-xs text-slate-400 font-semibold font-mono">2 Pages • A4 PDF</span>
             </div>
 
             <div>
@@ -289,11 +602,10 @@
             </div>
 
             <ul class="text-xs text-slate-600 space-y-1.5 border-t border-stone-100 pt-3">
-              <li>✔ <strong>Internal Backlog Clearance:</strong> Course credit recovery within AMU per UGC/MoE guidelines.</li>
-              <li>✔ <strong>Core Engineering MoUs:</strong> Mandate TPO recruitment drives with L&T, Tata Projects, and PSUs.</li>
-              <li>✔ <strong>Safe Night Transit:</strong> Continuous evening transit connecting Indira Gandhi (IG) and SN Halls.</li>
-              <li>✔ <strong>BE Office Timings:</strong> Alignment of administration hours with non-class intervals.</li>
-              <li>✔ <strong>DIPP & Lateral Entry:</strong> Administrative transparency on B.Tech entry for diploma graduates.</li>
+              <li>✔ <strong>Core Engineering Drives:</strong> Corporate engagement with L&T, Tata Projects, and PSUs.</li>
+              <li>✔ <strong>Evening Transit Loops:</strong> Scheduled security shuttles connecting SN and Bibi Fatima.</li>
+              <li>✔ <strong>BE Office Timings:</strong> Alignment of administration hours with student non-class intervals.</li>
+              <li>✔ <strong>Polytechnic Canteen:</strong> Land and budget allocation for diploma dining facilities.</li>
             </ul>
           </div>
 
@@ -311,182 +623,61 @@
       </div>
     </section>
 
-    <!-- 5. STATUTORY MANDATE BANNER: SECTION 22 AMU ACT -->
-    <section class="bg-gradient-to-br from-amu-deep via-slate-900 to-amu-emerald text-white rounded-3xl p-7 sm:p-12 shadow-soft relative overflow-hidden border border-emerald-900/40">
-      <div class="max-w-3xl mx-auto text-center space-y-4">
-        <div class="inline-flex items-center gap-1.5 bg-amu-gold/20 border border-amu-gold/40 px-3.5 py-1 rounded-full text-xs font-bold text-amber-300">
-          Section 22 of the AMU Act
-        </div>
-        
-        <h2 class="text-2xl sm:text-4xl font-display font-bold text-white leading-snug">
-          Why Your Court Member Vote Shapes Faculty Resources
-        </h2>
-
-        <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
-          The <strong>AMU Court</strong> is the supreme governing body of Aligarh Muslim University. Unlike the Union Cabinet which handles everyday student affairs, a Court Member exercises statutory voting power to <strong>sanction central budgets, amend academic statutes, audit university accounts, and allocate infrastructure grants</strong>.
-        </p>
-
-        <div class="pt-2">
-          <span class="inline-block bg-white/10 text-amber-300 border border-white/20 text-xs px-4 py-2 rounded-xl font-bold">
-            Elect an engineer who understands institutional governance and statutory policy.
-          </span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. THE 6 CORE COMMITMENT TILES -->
-    <section class="space-y-8">
+    <!-- 6. LIVE REAL-TIME GRIEVANCE DESK -->
+    <section id="grievance" class="bg-white rounded-3xl border border-stone-300 p-6 sm:p-10 shadow-soft max-w-4xl mx-auto space-y-8">
       
-      <div class="text-center max-w-xl mx-auto space-y-2">
-        <div class="text-xs font-bold text-amu-gold uppercase tracking-wider">Targeted Deliverables</div>
-        <h2 class="text-2xl sm:text-4xl font-display font-black text-slate-900">Six Core Commitments</h2>
-        <p class="text-xs sm:text-sm text-slate-600">Covering academic excellence, student welfare, hostel life, and placement reforms.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- Card 1 -->
-        <article class="bg-white p-6 rounded-3xl border border-stone-200/90 shadow-soft hover:shadow-card-hover transition-all flex flex-col justify-between">
-          <div>
-            <div class="text-amu-gold font-bold text-xs mb-2">01 / PLACEMENT & RECRUITMENT</div>
-            <h3 class="font-bold text-slate-900 text-lg mb-2">TPO Reforms & Corporate MoUs</h3>
-            <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
-              <li>• Institutionalize drives with core giants (L&T, Tata Projects, Afcons, PSUs) and Tier-1 product tech firms.</li>
-              <li>• Complete transparency in TPO shortlisting; zero hidden bias.</li>
-              <li>• Institutional MoUs for paid internships and corporate training workshops.</li>
-              <li>• Active guidance on scholarships, fee remissions, and funded software certifications.</li>
-            </ul>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 text-[11px] font-bold text-amu-emerald">
-            Career Advancement & Transparency
-          </div>
-        </article>
-
-        <!-- Card 2 -->
-        <article class="bg-white p-6 rounded-3xl border border-stone-200/90 shadow-soft hover:shadow-card-hover transition-all flex flex-col justify-between">
-          <div>
-            <div class="text-amu-gold font-bold text-xs mb-2">02 / LABS & COMPUTING</div>
-            <h3 class="font-bold text-slate-900 text-lg mb-2">24/7 Labs & Research Grants</h3>
-            <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
-              <li>• 24/7 departmental computer lab and testing facility access for major capstones.</li>
-              <li>• Upgraded laboratory equipment, modern testing apparatus, and surveying instruments.</li>
-              <li>• Centralized GPU clusters for AI/ML, structural design, and simulation.</li>
-              <li>• ₹30,000 baseline seed grant for final-year prototype teams (BAJA, hackathons).</li>
-            </ul>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 text-[11px] font-bold text-amu-emerald">
-            Technical Research & Innovation
-          </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="bg-white p-6 rounded-3xl border border-stone-200/90 shadow-soft hover:shadow-card-hover transition-all flex flex-col justify-between">
-          <div>
-            <div class="text-amu-gold font-bold text-xs mb-2">03 / HOSTEL LIVING</div>
-            <h3 class="font-bold text-slate-900 text-lg mb-2">Hostel Maintenance & Wi-Fi</h3>
-            <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
-              <li>• Single-seater allotments for final-year students for undisturbed placement prep.</li>
-              <li>• Permanent resolution of Wi-Fi dead-zones in Tarin, Suleiman, Morrison, and VM Halls.</li>
-              <li>• Rapid repair squads for hostel geysers, room switches, and plumbing fixtures.</li>
-              <li>• Mandatory monthly bacterial testing and filter servicing for drinking water coolers.</li>
-            </ul>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 text-[11px] font-bold text-amu-emerald">
-            Residential Welfare & Connectivity
-          </div>
-        </article>
-
-        <!-- Card 4 -->
-        <article class="bg-white p-6 rounded-3xl border border-stone-200/90 shadow-soft hover:shadow-card-hover transition-all flex flex-col justify-between">
-          <div>
-            <div class="text-amu-gold font-bold text-xs mb-2">04 / WELFARE & DINING</div>
-            <h3 class="font-bold text-slate-900 text-lg mb-2">Canteen Standards & Mess Audits</h3>
-            <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
-              <li>• Public monthly accounting of mess expenses; eliminate arbitrary deficit charges.</li>
-              <li>• Enforce food quality standards and strict price caps across faculty canteens.</li>
-              <li>• Dedicated funding and space allocation for Boys' Polytechnic Canteen.</li>
-              <li>• Subsidized in-campus printing, drafting, and stationery centre inside ZHCET boundary.</li>
-            </ul>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 text-[11px] font-bold text-amu-emerald">
-            Health, Sanitation & Dining
-          </div>
-        </article>
-
-        <!-- Card 5 -->
-        <article class="bg-white p-6 rounded-3xl border border-stone-200/90 shadow-soft hover:shadow-card-hover transition-all flex flex-col justify-between">
-          <div>
-            <div class="text-amu-gold font-bold text-xs mb-2">05 / ACADEMIC INFRASTRUCTURE</div>
-            <h3 class="font-bold text-slate-900 text-lg mb-2">Classrooms, Library & Sports</h3>
-            <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
-              <li>• Comprehensive maintenance of lecture theater projectors, smart boards, and seating.</li>
-              <li>• 24-hour AC reading room access in ZHCET with digital book access during exams.</li>
-              <li>• Refurbish sports courts and supply tournament-grade departmental equipment.</li>
-              <li>• University funding for interdepartmental technical symposiums, hackathons, and cricket fests.</li>
-            </ul>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 text-[11px] font-bold text-amu-emerald">
-            Learning Environment & Recreation
-          </div>
-        </article>
-
-        <!-- Card 6 -->
-        <article class="bg-white p-6 rounded-3xl border border-stone-200/90 shadow-soft hover:shadow-card-hover transition-all flex flex-col justify-between">
-          <div>
-            <div class="text-amu-gold font-bold text-xs mb-2">06 / SAFETY & GOVERNANCE</div>
-            <h3 class="font-bold text-slate-900 text-lg mb-2">Transit, Safety & Accountability</h3>
-            <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
-              <li>• Dedicated evening transit loops connecting women's halls (IG & SN) to ZHCET for late labs.</li>
-              <li>• Comprehensive street lighting repairs and enhanced campus safety patrols.</li>
-              <li>• Time-bound student grievance tracking with direct administrative accountability.</li>
-              <li>• Monthly open-door student-administration forums to review progress transparently.</li>
-            </ul>
-          </div>
-          <div class="mt-4 pt-3 border-t border-stone-100 text-[11px] font-bold text-amu-emerald">
-            Safety, Inclusion & Direct Redressal
-          </div>
-        </article>
-
-      </div>
-    </section>
-
-    <!-- 7. CROSS-FACULTY & POLYTECHNIC GRIEVANCE TRACKING PORTAL -->
-    <section id="grievance" class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-10 shadow-soft max-w-4xl mx-auto space-y-8">
-      
+      <!-- Grievance Desk Header & Emotional Grounding -->
       <div class="text-center max-w-2xl mx-auto space-y-3">
-        <span class="inline-block bg-amu-gold text-slate-950 text-xs font-extrabold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
-          Student Grievance Redressal Desk
+        <span class="inline-block bg-amu-gold text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
+          24/7 Student Grievance Desk
         </span>
-        <h2 class="text-2xl sm:text-3xl font-display font-black text-slate-900">
-          What Issue Should Be Tabled in the Court?
+        <h2 class="text-2xl sm:text-4xl font-display font-black text-slate-900 tracking-tight">
+          The 7-Day Accountability Desk
         </h2>
-        <p class="text-xs sm:text-sm text-slate-600">
-          Submit your concerns regarding labs, dining halls, Wi-Fi, or hostel maintenance directly to Syed Arif Ali.
+        <p class="text-xs sm:text-sm text-slate-600 font-medium">
+          Don't let your complaints disappear into committee drawers. Table your issue directly before the university administration.
         </p>
-        
-        <!-- Promised 7-Day Fast Resolution Guarantee Strip -->
-        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-50 via-amber-50 to-emerald-50 text-emerald-950 border border-emerald-300/80 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-sm">
-          <span class="text-base">⚡</span>
-          <span><strong>7-Day Rapid Statutory Redressal Guarantee:</strong> Every verified issue is processed and formally tabled before university authorities within 7 days.</span>
+
+        <!-- Clean, Credible 7-Day Protocol (No Dev Jargon) -->
+        <div class="bg-gradient-to-r from-stone-50 via-amber-50/40 to-stone-50 border border-stone-200 rounded-2xl p-4 text-left space-y-2 text-xs">
+          <div class="font-bold text-slate-900 flex items-center gap-1.5">
+            <span class="text-amu-copper text-sm">⚡</span>
+            <span>The 7-Day Action Guarantee:</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] text-slate-600">
+            <div class="bg-white p-2.5 rounded-xl border border-stone-200 shadow-sm">
+              <strong class="text-slate-900 block font-bold mb-0.5">Day 1–2: Intake & Audit</strong>
+              Every claim is reviewed directly with the student to verify facts and locations.
+            </div>
+            <div class="bg-white p-2.5 rounded-xl border border-stone-200 shadow-sm">
+              <strong class="text-slate-900 block font-bold mb-0.5">Day 3–4: Statutory Drafting</strong>
+              A formal memorandum is prepared citing administrative rights and UGC/AMU statutes.
+            </div>
+            <div class="bg-white p-2.5 rounded-xl border border-stone-200 shadow-sm">
+              <strong class="text-slate-900 block font-bold mb-0.5">Day 7: Stamped Submission</strong>
+              Hand-delivered to the Dean, Provost, or Principal with official receipt proof.
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Live Real-Time Docket Metrics Bar -->
-      <div class="grid grid-cols-3 gap-3 text-center">
+      <!-- Live Counters -->
+      <div class="grid grid-cols-3 gap-3 text-center font-mono">
         <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3">
-          <div id="statTotal" class="text-2xl sm:text-3xl font-display font-black text-amu-emerald">--</div>
-          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Issues Raised</div>
+          <div id="statTotal" class="text-2xl sm:text-3xl font-black text-amu-emerald">--</div>
+          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase font-sans">Issues Raised</div>
         </div>
         <div class="bg-stone-50 border border-stone-200 rounded-2xl p-3">
-          <div id="statActive" class="text-2xl sm:text-3xl font-display font-black text-amber-600">--</div>
-          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Under Review</div>
+          <div id="statActive" class="text-2xl sm:text-3xl font-black text-amber-600">--</div>
+          <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase font-sans">Under Review</div>
         </div>
         <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-3">
-          <div id="statResolved" class="text-2xl sm:text-3xl font-display font-black text-emerald-700">--</div>
-          <div class="text-[10px] sm:text-xs font-bold text-emerald-800 uppercase">Actioned / Resolved</div>
+          <div id="statResolved" class="text-2xl sm:text-3xl font-black text-emerald-700">--</div>
+          <div class="text-[10px] sm:text-xs font-bold text-emerald-800 uppercase font-sans">Actioned / Resolved</div>
         </div>
       </div>
 
+      <!-- Grievance Form -->
       <form onsubmit="handleGrievanceSubmit(event)" class="space-y-4">
         
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -503,7 +694,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Your Department / Branch</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Department / Branch</label>
             <select required id="branch" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
               <option value="">Select Branch</option>
               <option value="Civil Engineering">Civil Engineering</option>
@@ -517,7 +708,7 @@
             </select>
           </div>
 
-          <!-- Hall of Residence (Restricted to Designated Halls) -->
+          <!-- STRICTLY RESTRICTED TO 5 DESIGNATED HALLS -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Hall of Residence</label>
             <select required id="hall" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
@@ -546,7 +737,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Student Enrollment / WhatsApp (Optional)</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Enrolment No. or WhatsApp (Confidential)</label>
             <input id="contact" type="text" placeholder="e.g. GI9872 or +91 98XXXXXXXX" 
                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium">
           </div>
@@ -554,22 +745,22 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Specific Issue Details</label>
-          <textarea required id="description" rows="3" placeholder="e.g. Lab equipment broken, canteen food pricing, or Wi-Fi dead-zone in Tarin Hall Room..." 
+          <textarea required id="description" rows="3" placeholder="State room number, laboratory issue, Wi-Fi dead-zone, or mess charge with exact details..." 
                     class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-amu-emerald font-medium"></textarea>
         </div>
 
         <button type="submit" id="submitBtn"
                 class="w-full bg-amu-emerald hover:bg-amu-deep text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-sm text-sm flex items-center justify-center gap-2">
-          <span>Submit Grievance to Syed Arif Ali</span>
+          <span>Table Issue on the Live Court Docket</span>
         </button>
 
         <div id="grievanceAlert" class="hidden text-center text-xs font-bold text-emerald-900 bg-emerald-50 py-3 rounded-xl border border-emerald-300 space-y-1">
-          <div>✔ Grievance registered successfully to central database!</div>
-          <div class="text-[11px] text-emerald-800">Assigned Docket Tracking ID: <span id="newTicketId" class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold"></span></div>
+          <div>✔ Issue officially registered to the Court Representative's Docket!</div>
+          <div class="text-[11px] text-emerald-800">Your Official Ticket ID: <span id="newTicketId" class="font-mono bg-white px-2 py-0.5 rounded border border-emerald-300 font-bold"></span></div>
         </div>
       </form>
 
-      <!-- Live Docket Display (Limited strictly to Top 5 latest records) -->
+      <!-- Live Docket Table (Strictly Top 5 Recent Records) -->
       <div class="pt-6 border-t border-stone-200">
         <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div class="flex items-center gap-2">
@@ -577,12 +768,12 @@
             <h3 class="font-bold text-slate-900 text-sm">Live Court Representation Docket</h3>
             <span class="text-[10px] bg-stone-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-stone-200">Latest 5 Issues</span>
           </div>
-          <span class="text-[11px] text-slate-500 font-medium">Syncing across devices via PostgreSQL</span>
+          <span class="text-[11px] text-slate-500 font-medium">Live public register • Automatically synced across campus</span>
         </div>
 
         <div class="overflow-x-auto rounded-xl border border-stone-200 bg-stone-50/50">
           <table class="w-full text-left text-xs text-slate-700">
-            <thead class="bg-stone-100 text-slate-800 font-bold uppercase text-[10px] tracking-wider border-b border-stone-200">
+            <thead class="bg-stone-100 text-slate-800 font-bold uppercase text-[10px] tracking-wider border-b border-stone-200 font-mono">
               <tr>
                 <th class="py-2.5 px-3">Ticket ID</th>
                 <th class="py-2.5 px-3">Stream / Branch</th>
@@ -602,14 +793,14 @@
 
     </section>
 
-    <!-- 8. WHATSAPP & INSTAGRAM MOBILIZATION SECTION -->
+    <!-- 7. WHATSAPP & INSTAGRAM MOBILIZATION NETWORK -->
     <section class="space-y-6">
       
       <div class="text-center max-w-xl mx-auto space-y-2">
         <span class="inline-block bg-amu-gold/20 text-amber-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
           Direct Connect
         </span>
-        <h2 class="text-2xl sm:text-4xl font-display font-black text-slate-900">
+        <h2 class="text-3xl sm:text-4xl font-display font-black text-slate-900">
           Join the Campaign Network
         </h2>
         <p class="text-xs sm:text-sm text-slate-600">
@@ -619,7 +810,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
 
-        <!-- Card 1: Official WhatsApp Support Group -->
+        <!-- WhatsApp Support Group -->
         <div class="bg-white rounded-3xl border border-stone-200 p-6 shadow-soft text-center flex flex-col justify-between items-center space-y-4">
           <div class="space-y-1">
             <span class="inline-block bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-200">
@@ -636,7 +827,8 @@
                  class="w-full h-full object-contain rounded-xl">
           </div>
 
-          <a href="https://chat.whatsapp.com/BUicLPfQbqF2USVRzgAalz?s=qt&p=a&mlu=4&ilr=4&iam=2" 
+          <a href="https://chat.whatsapp.com/" 
+             id="whatsappGroupBtn"
              target="_blank" 
              rel="noopener noreferrer"
              class="w-full bg-[#25D366] hover:bg-[#1ebd5a] text-white font-bold py-3 px-4 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-sm">
@@ -645,7 +837,7 @@
           </a>
         </div>
 
-        <!-- Card 2: Official Instagram Updates -->
+        <!-- Instagram Profile -->
         <div class="bg-white rounded-3xl border border-stone-200 p-6 shadow-soft text-center flex flex-col justify-between items-center space-y-4">
           <div class="space-y-1">
             <span class="inline-block bg-pink-50 text-pink-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-pink-200">
@@ -676,7 +868,7 @@
 
   </main>
 
-  <!-- 9. FOOTER WITH DEVELOPER WATERMARK -->
+  <!-- 8. FOOTER WITH DEVELOPER WATERMARK -->
   <footer class="border-t border-stone-200 bg-white py-8 text-center text-xs text-slate-500 space-y-3">
     <div class="flex items-center justify-center gap-2 font-bold text-slate-800 flex-wrap">
       <span class="text-amu-emerald">Syed Arif Ali</span>
@@ -688,7 +880,7 @@
 
     <p class="text-[11px] text-slate-400">Strictly published in adherence to the Lyngdoh Committee Guidelines on University Student Elections.</p>
 
-    <!-- Developer Signature / Watermark -->
+    <!-- Developer Watermark -->
     <div class="pt-3 border-t border-stone-100 flex items-center justify-center gap-1.5 text-[11px] text-slate-400 font-mono tracking-tight">
       <span>Architected & Engineered with</span>
       <span class="text-red-500 animate-pulse">💻</span>
@@ -696,17 +888,38 @@
       <a href="https://github.com/MohammadRushaan" 
          target="_blank" 
          rel="noopener noreferrer" 
-         class="font-semibold text-amu-emerald hover:text-amu-gold transition-colors inline-flex items-center gap-1 underline decoration-dotted underline-offset-2">
+         class="font-semibold text-amu-emerald hover:text-amu-copper transition-colors inline-flex items-center gap-1 underline decoration-dotted underline-offset-2">
         <span>Mohammad Rushaan</span>
         <svg class="w-3 h-3 fill-current opacity-70" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       </a>
     </div>
   </footer>
 
-  <!-- 10. REAL-TIME JAVASCRIPT: CONNECTED TO LIVE RENDER POSTGRESQL -->
+  <!-- 9. REAL-TIME FRONTEND CLIENT JAVASCRIPT -->
   <script>
-    // Live Render API Endpoint
+    // Live Render API
     const BACKEND_URL = "https://amu-elections.onrender.com";
+
+    // Dynamic Filter for Manifesto Pillars
+    function filterManifesto(category) {
+      const cards = document.querySelectorAll('.manifesto-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+      
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white');
+        btn.classList.add('bg-white', 'text-slate-700');
+      });
+      event.target.classList.remove('bg-white', 'text-slate-700');
+      event.target.classList.add('bg-slate-900', 'text-white');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
 
     // 1. Fetch Aggregated Statistics
     async function fetchStats() {
@@ -718,31 +931,31 @@
         document.getElementById('statActive').innerText = data.active;
         document.getElementById('statResolved').innerText = data.resolved;
       } catch (err) {
-        // Fallback default numbers if waking from cold sleep
-        document.getElementById('statTotal').innerText = '14';
-        document.getElementById('statActive').innerText = '6';
-        document.getElementById('statResolved').innerText = '8';
+        document.getElementById('statTotal').innerText = '0';
+        document.getElementById('statActive').innerText = '0';
+        document.getElementById('statResolved').innerText = '0';
       }
     }
 
     // 2. Fetch Live Top 5 Dockets
     async function fetchLiveDockets() {
+      const tbody = document.getElementById('grievanceDocketBody');
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances`);
         if (!res.ok) throw new Error();
         const data = await res.json();
         renderDocketTable(data);
       } catch (err) {
-        console.warn('Backend sleeping or offline, attempting local render.');
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">Docket syncing... Please table the first issue.</td></tr>';
       }
     }
 
-    // 3. Render Table HTML
+    // 3. Render Table HTML with Anonymized Student Safety
     function renderDocketTable(records) {
       const tbody = document.getElementById('grievanceDocketBody');
       tbody.innerHTML = '';
       if (!records || records.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="py-3 text-center text-slate-400">No issues currently in docket.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">No issues currently in docket. Be the first to table a motion.</td></tr>';
         return;
       }
       records.slice(0, 5).forEach(d => {
@@ -764,7 +977,7 @@
       e.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
       submitBtn.disabled = true;
-      submitBtn.innerText = 'Submitting to Central Database...';
+      submitBtn.innerText = 'Transmitting to Live Database...';
 
       const payload = {
         stream: document.getElementById('stream').value,
@@ -782,7 +995,7 @@
           body: JSON.stringify(payload)
         });
 
-        if (!res.ok) throw new Error('Failed to record on server');
+        if (!res.ok) throw new Error('Database write failure');
         const data = await res.json();
 
         document.getElementById('newTicketId').innerText = data.ticket_id;
@@ -791,10 +1004,10 @@
         await fetchLiveDockets();
         e.target.reset();
       } catch (err) {
-        alert('Could not connect to live backend. Please verify your Render service is active.');
+        alert('Could not connect to live backend. Please verify your Render web service is active.');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = 'Submit Grievance to Syed Arif Ali';
+        submitBtn.innerText = 'Table Issue on the Live Court Docket';
       }
     }
 
@@ -828,7 +1041,7 @@
       }
     }
 
-    // 6. Initialize and Poll Every 15 Seconds
+    // 6. Polling & Initialization
     function initPage() {
       fetchStats();
       fetchLiveDockets();
