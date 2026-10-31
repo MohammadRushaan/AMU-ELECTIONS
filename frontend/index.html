@@ -57,16 +57,12 @@
   <aside class="bg-gradient-to-r from-amu-dark via-amu-emerald to-amu-dark text-slate-100 py-3 sm:py-3.5 px-4 border-b border-amber-500/30 shadow-md relative z-50">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-4 flex-wrap">
       
-      <!-- Election Meta -->
+      <!-- Election Meta with High-Visibility Ballot 03 Chip -->
       <div class="flex items-center gap-2.5">
-        <span class="relative flex h-3 w-3">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-extrabold text-white text-xs sm:text-sm tracking-wide">
+          Faculty of Engineering &amp; Technology
         </span>
-        <div>
-          <span class="font-extrabold text-white text-xs sm:text-sm tracking-wide">AMUSU Elections 2026</span>
-          <span class="text-stone-300 text-xs hidden sm:inline">• ZHCET & University Polytechnic</span>
-        </div>
       </div>
 
       <!-- Large Prominent Countdown Module -->
@@ -130,9 +126,14 @@
           <span>⚡ Live Grievance Desk</span>
         </a>
 
-        <div class="bg-gradient-to-r from-amber-500 to-amber-400 text-slate-950 px-3.5 py-1.5 rounded-xl text-xs font-black tracking-wider flex items-center gap-1.5 shadow-sm border border-amber-600/30">
-          <span>🗳️</span>
-          <span>BALLOT NO. <span class="text-sm font-black text-red-950 font-mono">03</span></span>
+        <!-- ENLARGED & HIGHLIGHTED BALLOT NO. 03 BUTTON -->
+        <!-- CLEAN, BALANCED BALLOT PILL -->
+        <div class="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-sm border border-amber-600/20 select-none">
+          <span class="text-sm leading-none">🗳️</span>
+          <span class="tracking-wide">BALLOT NO.</span>
+          <span class="font-mono text-sm font-black bg-slate-950 text-amber-300 px-1.5 py-0.5 rounded-md leading-none">
+            03
+          </span>
         </div>
 
         <a href="https://api.whatsapp.com/send?text=I%20am%20supporting%20Syed%20Arif%20Ali%20(Final%20Year%20Civil,%20ZHCET)%20for%20COURT%20MEMBER%20in%20AMUSU%20Elections%202026.%20A%20proven%20voice%20for%20hostel%20rights,%20labs,%20and%20transparent%20governance!%20Explore%20the%20platform%20and%20table%20your%20issues:%20https://syed-arif-ali-court-member.vercel.app" 
@@ -1232,6 +1233,31 @@
     <span>BALLOT NO. 03</span>
   </div>
   </div>
+
+  <!-- PERSISTENT SCROLL-ALONG BALLOT 03 BADGE (FLOATS ON ALL SCREENS) -->
+  <aside aria-label="Ballot Reminder" class="fixed bottom-5 right-5 z-50 animate-bounce hover:animate-none transition-transform hover:scale-105">
+    <div class="bg-slate-950 text-white rounded-2xl p-2.5 sm:p-3 shadow-2xl border-2 border-amber-400 flex items-center gap-3">
+      
+      <!-- Stamped Number Box -->
+      <div class="bg-gradient-to-br from-amber-400 to-amber-500 text-slate-950 font-black font-mono text-2xl sm:text-3xl px-3 py-1.5 rounded-xl shadow-inner leading-none flex items-center justify-center">
+        03
+      </div>
+
+      <!-- Voter Text -->
+      <div class="pr-2 text-left leading-tight">
+        <div class="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest text-amber-400 font-extrabold">
+          VOTE OFFICIAL BALLOT
+        </div>
+        <div class="text-xs sm:text-sm font-display font-black text-white">
+          Syed Arif Ali
+        </div>
+        <div class="text-[10px] text-stone-400 font-medium">
+          Faculty of Engg. &amp; Tech.
+        </div>
+      </div>
+
+    </div>
+  </aside>
 
 </body>
 </html>
