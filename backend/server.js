@@ -1,16 +1,23 @@
 const express = require('express');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const { Pool } = require('pg');
 require('dotenv').config();
 
 const app = express();
+
+// REQUIRED ON RENDER: Tells Express to trust Render's reverse proxy 
+// so rateLimit reads the voter's real IP, not Render's load balancer IP
+app.set('trust proxy', 1);
 
 app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
+  max: 10,
+  idleTimeoutMillis: 30000
 });
 
 async function initDB() {
@@ -36,12 +43,35 @@ async function initDB() {
 }
 initDB();
 
+// ==========================================
+// RATE LIMITERS
+// ==========================================
+
+// Limiter for fetching data (GET requests)
+const apiReadLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15-minute window
+  max: 300,                 // Up to 300 fetches per IP per 15 mins
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Limiter for submitting issues (POST requests)
+const grievancePostLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15-minute window
+  max: 5,                   // Maximum 5 submissions per IP every 15 mins
+  message: { 
+    error: 'Submission rate limit reached. Please wait a few minutes before submitting another issue.' 
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.get('/', (req, res) => {
-  res.send('ZHCET AMUSU 2026 Grievance Tracking API is live.');
+  res.send('Engineering Faculty Election Grievance Tracking API is live.');
 });
 
 // GET: Live aggregated metrics for the public count cards
-app.get('/api/grievances/stats', async (req, res) => {
+app.get('/api/grievances/stats', apiReadLimiter, async (req, res) => {
   try {
     const totalRes = await pool.query('SELECT COUNT(*) FROM grievances');
     const resolvedRes = await pool.query("SELECT COUNT(*) FROM grievances WHERE status ILIKE '%Resolved%' OR status ILIKE '%Redressed%'");
@@ -58,7 +88,7 @@ app.get('/api/grievances/stats', async (req, res) => {
 });
 
 // GET: Public docket (strictly limits to the 5 most recent records)
-app.get('/api/grievances', async (req, res) => {
+app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   try {
     const { rows } = await pool.query(
       'SELECT ticket_id, stream, branch, hall, category, description, status, created_at FROM grievances ORDER BY created_at DESC LIMIT 5'
@@ -82,7 +112,7 @@ app.get('/api/grievances/admin-all', async (req, res) => {
 });
 
 // POST: Register new issue from voter
-app.post('/api/grievances', async (req, res) => {
+app.post('/api/grievances', grievancePostLimiter, async (req, res) => {
   try {
     const { stream, branch, hall, category, description, contact } = req.body;
 
@@ -90,8 +120,9 @@ app.post('/api/grievances', async (req, res) => {
       return res.status(400).json({ error: 'All primary fields are required.' });
     }
 
-    let prefix = 'ZHCET';
+    let prefix = 'ENGG';
     if (stream.includes('Polytechnic')) prefix = 'POLY';
+    else if (stream.includes('BVoc')) prefix = 'BVOC';
     else if (stream.includes('BArch')) prefix = 'BARCH';
     else if (stream.includes('Evening')) prefix = 'BEEVE';
 
