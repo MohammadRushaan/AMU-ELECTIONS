@@ -44,10 +44,22 @@ async function initDB() {
 initDB();
 
 // ==========================================
+// ADMIN AUTHENTICATION MIDDLEWARE
+// ==========================================
+const requireAdminAuth = (req, res, next) => {
+  const adminKey = req.headers['x-admin-key'];
+  const expectedKey = process.env.ADMIN_SECRET_KEY || 'arif2026court';
+  if (!adminKey || adminKey !== expectedKey) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin credentials.' });
+  }
+  next();
+};
+
+// ==========================================
 // RATE LIMITERS
 // ==========================================
 
-// Limiter for fetching data (GET requests)
+// Limiter for fetching public data (GET requests)
 const apiReadLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15-minute window
   max: 300,                 // Up to 300 fetches per IP per 15 mins
@@ -71,11 +83,22 @@ app.get('/', (req, res) => {
 });
 
 // GET: Live aggregated metrics for the public count cards
+// 'Raised to Authorities', 'Resolved', and 'Redressed' all count under resolved
 app.get('/api/grievances/stats', apiReadLimiter, async (req, res) => {
   try {
     const totalRes = await pool.query('SELECT COUNT(*) FROM grievances');
-    const resolvedRes = await pool.query("SELECT COUNT(*) FROM grievances WHERE status ILIKE '%Resolved%' OR status ILIKE '%Redressed%'");
-    const activeRes = await pool.query("SELECT COUNT(*) FROM grievances WHERE status NOT ILIKE '%Resolved%' AND status NOT ILIKE '%Redressed%'");
+    const resolvedRes = await pool.query(`
+      SELECT COUNT(*) FROM grievances 
+      WHERE status ILIKE '%Resolved%' 
+         OR status ILIKE '%Redressed%' 
+         OR status ILIKE '%Raised to Authorities%'
+    `);
+    const activeRes = await pool.query(`
+      SELECT COUNT(*) FROM grievances 
+      WHERE status NOT ILIKE '%Resolved%' 
+        AND status NOT ILIKE '%Redressed%' 
+        AND status NOT ILIKE '%Raised to Authorities%'
+    `);
 
     res.status(200).json({
       total: parseInt(totalRes.rows[0].count, 10),
@@ -99,12 +122,31 @@ app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   }
 });
 
-// GET: Admin feed (fetches ALL grievances with contact info for candidate team)
-app.get('/api/grievances/admin-all', async (req, res) => {
+// GET: Admin feed (supports optional status and stream query filters, requires admin key)
+app.get('/api/grievances/admin-all', requireAdminAuth, async (req, res) => {
   try {
-    const { rows } = await pool.query(
-      'SELECT * FROM grievances ORDER BY created_at DESC'
-    );
+    const { status, stream } = req.query;
+    let query = 'SELECT * FROM grievances';
+    const params = [];
+    const conditions = [];
+
+    if (status && status !== 'all') {
+      params.push(`%${status}%`);
+      conditions.push(`status ILIKE $${params.length}`);
+    }
+
+    if (stream && stream !== 'all') {
+      params.push(stream);
+      conditions.push(`stream = $${params.length}`);
+    }
+
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    query += ' ORDER BY created_at DESC';
+
+    const { rows } = await pool.query(query, params);
     res.status(200).json(rows);
   } catch (err) {
     res.status(500).json({ error: 'Database read failure' });
@@ -144,11 +186,21 @@ app.post('/api/grievances', grievancePostLimiter, async (req, res) => {
   }
 });
 
-// PATCH: Candidate updates status (e.g., Tabled in Court, Resolved)
-app.patch('/api/grievances/:ticket_id', async (req, res) => {
+// PATCH: Update status (Secured by Admin Key)
+app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
   try {
     const { ticket_id } = req.params;
     const { status } = req.body;
+
+    const allowedStatuses = [
+      'Scheduled for Court Action',
+      'Raised to Authorities',
+      'Redressed & Resolved'
+    ];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ error: 'Invalid status type submitted.' });
+    }
 
     const updateQuery = `
       UPDATE grievances SET status = $1 WHERE ticket_id = $2 RETURNING *;
@@ -164,8 +216,8 @@ app.patch('/api/grievances/:ticket_id', async (req, res) => {
   }
 });
 
-// DELETE: Remove a grievance permanently from PostgreSQL
-app.delete('/api/grievances/:ticket_id', async (req, res) => {
+// DELETE: Remove a grievance permanently from PostgreSQL (Secured by Admin Key)
+app.delete('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
   try {
     const { ticket_id } = req.params;
     const deleteRes = await pool.query('DELETE FROM grievances WHERE ticket_id = $1 RETURNING *;', [ticket_id]);

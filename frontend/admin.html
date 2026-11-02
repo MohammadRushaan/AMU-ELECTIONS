@@ -3,149 +3,234 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Grievance Control Room | Syed Arif Ali Campaign</title>
+  <title>Admin Grievance Control Desk | Syed Arif Ali Campaign</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-stone-100 text-slate-800 p-4 sm:p-8">
+<body class="bg-slate-900 text-slate-100 font-['Plus_Jakarta_Sans'] min-h-screen p-4 sm:p-8">
 
   <div class="max-w-6xl mx-auto space-y-6">
-    
-    <!-- Top Header -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+    <!-- Top Admin Header -->
+    <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl">
       <div>
-        <span class="text-xs font-bold text-amber-700 uppercase tracking-wider bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
-          Confidential Campaign Desk
-        </span>
-        <h1 class="text-2xl font-bold text-slate-900 mt-1">Syed Arif Ali — Grievance Resolution Portal</h1>
-        <p class="text-xs text-slate-500">Live PostgreSQL Database View • AMUSU Elections 2026</p>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">Internal Campaign Ops</span>
+        </div>
+        <h1 class="text-2xl font-black text-white mt-1">Grievance Command Desk</h1>
+        <p class="text-xs text-slate-400">Syed Arif Ali • AMU Court Candidate (Ballot No. 03)</p>
       </div>
-      <button onclick="fetchAllGrievances()" class="bg-[#064426] hover:bg-[#032115] text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm transition-all">
-        <span>🔄</span>
-        <span>Refresh Feed</span>
-      </button>
+
+      <div class="flex items-center gap-3">
+        <button onclick="exportCSV()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl border border-slate-700 flex items-center gap-1.5 transition">
+          📥 Export CSV
+        </button>
+        <button onclick="logoutAdmin()" class="bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs font-bold px-3.5 py-2 rounded-xl border border-red-500/30 transition">
+          Lock Desk
+        </button>
+      </div>
+    </header>
+
+    <!-- Filters & Search Bar -->
+    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px]">Filter Status:</span>
+        <button onclick="filterBy('all')" class="status-tab px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold">All</button>
+        <button onclick="filterBy('Scheduled')" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">⏳ Scheduled</button>
+        <button onclick="filterBy('Raised to Authorities')" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">🏛️ Raised to Authorities</button>
+        <button onclick="filterBy('Resolved')" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">✓ Resolved</button>
+      </div>
+
+      <div class="text-slate-400 font-mono" id="counterSummary">
+        Loading tickets...
+      </div>
     </div>
 
-    <!-- Issues Table -->
-    <div class="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
-      <div class="p-4 border-b border-stone-200 bg-stone-50 font-bold text-xs text-slate-700 flex justify-between items-center">
-        <span>All Recorded Grievances (<span id="totalCount">0</span>)</span>
-        <span class="text-[11px] text-slate-500">Actions sync immediately across all voter devices</span>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-700">
-          <thead class="bg-stone-100 uppercase text-[10px] tracking-wider text-slate-600 border-b border-stone-200">
-            <tr>
-              <th class="py-3 px-4">Ticket</th>
-              <th class="py-3 px-4">Student & Stream</th>
-              <th class="py-3 px-4">Hall</th>
-              <th class="py-3 px-4">Issue Details</th>
-              <th class="py-3 px-4">Current Status</th>
-              <th class="py-3 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="adminTableBody" class="divide-y divide-stone-200 font-medium">
-            <tr><td colspan="6" class="py-8 text-center text-slate-400">Loading issues...</td></tr>
-          </tbody>
-        </table>
-      </div>
+    <!-- Grievances Container Grid -->
+    <div id="grievanceGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="col-span-full text-center py-12 text-slate-500 font-mono text-sm">Authenticating session...</div>
     </div>
 
   </div>
 
   <script>
     const BACKEND_URL = "https://amu-elections.onrender.com";
+    let adminKey = sessionStorage.getItem('COURT_ADMIN_KEY');
+    let allRecords = [];
+    let activeFilter = 'all';
 
-    async function fetchAllGrievances() {
-      const tbody = document.getElementById('adminTableBody');
+    // Verify Passkey
+    function ensureAuth() {
+      if (!adminKey) {
+        adminKey = prompt("Enter Campaign Operations Passkey:");
+        if (!adminKey) {
+          document.body.innerHTML = '<div class="p-8 text-center text-red-400 font-bold font-mono">Access Denied. Reload to enter key.</div>';
+          return false;
+        }
+        sessionStorage.setItem('COURT_ADMIN_KEY', adminKey);
+      }
+      return true;
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('COURT_ADMIN_KEY');
+      location.reload();
+    }
+
+    async function loadAdminData() {
+      if (!ensureAuth()) return;
       try {
-        const res = await fetch(`${BACKEND_URL}/api/grievances/admin-all`);
-        if (!res.ok) throw new Error('API failure');
-        const data = await res.json();
-        document.getElementById('totalCount').innerText = data.length;
-        renderAdminTable(data);
+        const res = await fetch(`${BACKEND_URL}/api/grievances/admin-all`, {
+          headers: { 'x-admin-key': adminKey }
+        });
+
+        if (res.status === 401) {
+          alert('Incorrect Passkey!');
+          sessionStorage.removeItem('COURT_ADMIN_KEY');
+          location.reload();
+          return;
+        }
+
+        allRecords = await res.json();
+        renderAdminCards();
       } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-red-500 font-bold">Failed to connect to Render database.</td></tr>';
+        document.getElementById('grievanceGrid').innerHTML = 
+          '<div class="col-span-full bg-red-950/40 border border-red-800/50 p-4 rounded-xl text-center text-red-300 text-xs">Failed to fetch grievances. Ensure backend is awake.</div>';
       }
     }
 
-    function renderAdminTable(records) {
-      const tbody = document.getElementById('adminTableBody');
-      tbody.innerHTML = '';
-      if (!records.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-slate-400">No issues recorded yet.</td></tr>';
+    function filterBy(status) {
+      activeFilter = status;
+      document.querySelectorAll('.status-tab').forEach(b => {
+        b.className = 'status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700';
+      });
+      event.target.className = 'status-tab px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold';
+      renderAdminCards();
+    }
+
+    function renderAdminCards() {
+      const grid = document.getElementById('grievanceGrid');
+      grid.innerHTML = '';
+
+      const filtered = allRecords.filter(r => {
+        if (activeFilter === 'all') return true;
+        return (r.status || '').toLowerCase().includes(activeFilter.toLowerCase());
+      });
+
+      document.getElementById('counterSummary').innerText = `Showing ${filtered.length} of ${allRecords.length} records`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center py-12 text-slate-500 font-mono text-sm">No issues found in this category.</div>';
         return;
       }
 
-      records.forEach(r => {
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-stone-50 transition-colors';
-        tr.innerHTML = `
-          <td class="py-3 px-4 font-mono font-bold text-[#064426]">${r.ticket_id}</td>
-          <td class="py-3 px-4">
-            <div class="font-bold text-slate-900">${r.stream}</div>
-            <div class="text-[11px] text-slate-500">${r.branch}</div>
-            <div class="text-[11px] text-emerald-700 font-mono font-bold">${r.contact || 'No contact provided'}</div>
-          </td>
-          <td class="py-3 px-4">${r.hall}</td>
-          <td class="py-3 px-4 max-w-xs">
-            <div class="font-bold text-amber-900 text-[11px]">${r.category}</div>
-            <div class="text-slate-600 line-clamp-3">${r.description}</div>
-          </td>
-          <td class="py-3 px-4">
-            <span class="inline-block bg-amber-100 text-amber-900 text-[10px] px-2.5 py-1 rounded-full font-bold">
-              ${r.status}
-            </span>
-          </td>
-          <td class="py-3 px-4">
-            <div class="flex items-center gap-2">
-              <select onchange="updateStatus('${r.ticket_id}', this.value)" class="text-[11px] bg-white border border-stone-300 rounded px-2 py-1.5 font-medium focus:outline-none focus:border-emerald-600">
-                <option value="">Status...</option>
-                <option value="Scheduled for Court Action">Scheduled for Court</option>
-                <option value="Tabled in Court Agenda">Tabled in Court</option>
-                <option value="Under Statutory Review">Under Review</option>
-                <option value="Resolved / Redressed">Mark Resolved ✔</option>
-              </select>
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition";
 
-              <button onclick="deleteGrievance('${r.ticket_id}')" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 p-1.5 rounded-lg text-xs font-bold transition-all" title="Permanently Delete">
-                🗑️
-              </button>
+        // WhatsApp direct link generator
+        const rawPhone = (item.contact || '').replace(/[^0-9]/g, '');
+        const waLink = rawPhone ? `https://wa.me/91${rawPhone.slice(-10)}?text=${encodeURIComponent(`Salam, regarding your issue ${item.ticket_id} submitted to Syed Arif Ali's Court Docket:`)}` : null;
+
+        card.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="font-mono text-xs font-black text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded">
+                ${item.ticket_id}
+              </span>
+              <span class="text-[11px] text-slate-400 font-mono">
+                ${new Date(item.created_at).toLocaleDateString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}
+              </span>
             </div>
-          </td>
+
+            <div>
+              <div class="text-xs font-bold text-emerald-400">${item.stream} • ${item.branch}</div>
+              <div class="text-[11px] text-slate-400">Hall: <span class="text-slate-200 font-semibold">${item.hall}</span> | Category: <span class="text-slate-200 font-semibold">${item.category}</span></div>
+            </div>
+
+            <p class="text-xs text-slate-300 bg-slate-900 p-3 rounded-xl border border-slate-800/80 leading-relaxed font-sans">
+              "${item.description}"
+            </p>
+
+            <div class="text-[11px] text-slate-400 flex items-center justify-between">
+              <span>Contact: <strong class="text-white">${item.contact || 'Anonymous'}</strong></span>
+              ${waLink ? `<a href="${waLink}" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1">💬 WhatsApp Student</a>` : ''}
+            </div>
+          </div>
+
+          <!-- Admin Controls Row -->
+          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2 flex-wrap">
+            <div class="flex items-center gap-2">
+              <label class="text-[10px] text-slate-400 uppercase font-bold">Status:</label>
+              <select onchange="updateTicketStatus('${item.ticket_id}', this.value)" class="bg-slate-900 border border-slate-700 text-white rounded-lg px-2 py-1 text-xs focus:ring-1 focus:ring-amber-400 outline-none">
+                <option value="Scheduled for Court Action" ${item.status === 'Scheduled for Court Action' ? 'selected' : ''}>⏳ Scheduled</option>
+                <option value="Raised to Authorities" ${item.status === 'Raised to Authorities' ? 'selected' : ''}>🏛️ Raised to Authorities</option>
+                <option value="Redressed & Resolved" ${item.status === 'Redressed & Resolved' ? 'selected' : ''}>✓ Redressed & Resolved</option>
+              </select>
+            </div>
+
+            <button onclick="deleteTicket('${item.ticket_id}')" class="text-red-400 hover:text-red-300 hover:bg-red-950/40 px-2.5 py-1 rounded-lg text-xs font-semibold border border-red-500/20 transition">
+              🗑️ Delete
+            </button>
+          </div>
         `;
-        tbody.appendChild(tr);
+        grid.appendChild(card);
       });
     }
 
-    async function updateStatus(ticketId, newStatus) {
-      if (!newStatus) return;
+    async function updateTicketStatus(ticketId, newStatus) {
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances/${ticketId}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-key': adminKey
+          },
           body: JSON.stringify({ status: newStatus })
         });
         if (!res.ok) throw new Error();
-        fetchAllGrievances();
+        const updated = await res.json();
+        
+        // Update local state
+        const target = allRecords.find(r => r.ticket_id === ticketId);
+        if (target) target.status = updated.status;
+        renderAdminCards();
       } catch (err) {
-        alert('Failed to update status on server.');
+        alert('Failed to update ticket status. Check credentials and server status.');
       }
     }
 
-    async function deleteGrievance(ticketId) {
-      if (!confirm(`Are you sure you want to permanently delete ticket ${ticketId}?`)) return;
+    async function deleteTicket(ticketId) {
+      if (!confirm(`Are you sure you want to delete ticket ${ticketId}? This action is irreversible.`)) return;
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances/${ticketId}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          headers: { 'x-admin-key': adminKey }
         });
         if (!res.ok) throw new Error();
-        fetchAllGrievances();
+        allRecords = allRecords.filter(r => r.ticket_id !== ticketId);
+        renderAdminCards();
       } catch (err) {
-        alert('Failed to delete grievance from server.');
+        alert('Failed to delete ticket.');
       }
     }
 
-    document.addEventListener('DOMContentLoaded', fetchAllGrievances);
+    function exportCSV() {
+      if (!allRecords.length) return alert('No data to export.');
+      let csv = 'Ticket ID,Stream,Branch,Hall,Category,Description,Contact,Status,Date\n';
+      allRecords.forEach(r => {
+        csv += `"${r.ticket_id}","${r.stream}","${r.branch}","${r.hall}","${r.category}","${(r.description || '').replace(/"/g, '""')}","${r.contact || ''}","${r.status}","${r.created_at}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `AMU_Grievances_Export_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAdminData);
   </script>
 </body>
 </html>
