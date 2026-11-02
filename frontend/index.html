@@ -904,7 +904,7 @@
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <!-- After -->
             <h3 class="font-bold text-slate-900 text-sm">Live Public Issue Register</h3>
-            <span class="text-[10px] bg-stone-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-stone-200">Latest 5 Entries</span>
+            <span class="text-[10px] bg-stone-100 text-slate-600 font-bold px-2 py-0.5 rounded-full border border-stone-200">Latest 10 Entries</span>
           </div>
           <span class="text-[11px] text-slate-500 font-medium">Live public register • Automatically synced across campus</span>
         </div>
@@ -1007,31 +1007,30 @@
   </main>
 
   <!-- 8. FOOTER WITH DEVELOPER WATERMARK -->
-  <footer class="border-t border-stone-200 bg-white py-8 text-center text-s text-slate-500 space-y-3">
-    <div class="flex items-center justify-center gap-2 font-bold text-slate-800 flex-wrap">
-      <span class="text-amu-emerald">Syed Arif Ali</span>
-      <span>•</span>
-      <span>Final year Civil Engineering, ZHCET</span>
-      <span>•</span>
-      <span>Candidate for Court Member, AMU Elections 2026</span>
-    </div>
+  <!-- FOOTER (SIZING & CLEARANCE FIXES ONLY - NO COLOR CHANGES) -->
+<footer class="bg-slate-950 text-slate-400 pt-10 pb-32 sm:pb-24 px-4 sm:px-6 text-center space-y-4 relative z-10">
+  <div class="max-w-4xl mx-auto space-y-2">
+    <!-- Candidate Line (Readable Size) -->
+    <p class="text-sm sm:text-base font-bold text-white tracking-wide">
+      Syed Arif Ali • Final Year Civil Engineering, ZHCET • Candidate for Court Member, AMU Elections 2026
+    </p>
 
-    <p class="text-[11px] text-slate-400">Strictly published in adherence to the Lyngdoh Committee Guidelines on University Student Elections.</p>
+    <!-- Advisory / Lyngdoh Note -->
+    <p class="text-xs text-slate-400">
+      Strictly published in adherence to the Lyngdoh Committee Guidelines on University Student Elections.
+    </p>
 
-    <!-- Developer Watermark -->
-    <div class="pt-3 border-t border-stone-100 flex items-center justify-center gap-1.5 text-[12px] text-slate-500 font-mono tracking-tight">
-      <span>Architected & Engineered with</span>
-      <span class="text-red-500 animate-pulse">💻</span>
-      <span>by</span>
-      <a href="https://github.com/MohammadRushaan" 
-         target="_blank" 
-         rel="noopener noreferrer" 
-         class="font-semibold text-amu-emerald hover:text-amu-copper transition-colors inline-flex items-center gap-1 underline decoration-dotted underline-offset-2">
-        <span>Mohammad Rushaan</span>
-        <svg class="w-3 h-3 fill-current opacity-70" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    <!-- Developer Credit (Centered, Visible Spacing & Legible Size) -->
+    <div class="pt-3 border-t border-slate-800 text-xs sm:text-sm text-slate-400 font-mono flex flex-wrap items-center justify-center gap-2">
+      <span>Architected &amp; Engineered for AMU Elections 2026</span>
+      <span>•</span>
+      <a href="https://github.com/MohammadRushaan" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-4 inline-flex items-center gap-1">
+        by Mohammad Rushaan
+        <svg class="w-4 h-4 inline fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       </a>
     </div>
-  </footer>
+  </div>
+</footer>
 
   <!-- 9. REAL-TIME FRONTEND CLIENT JAVASCRIPT -->
   <script>
@@ -1099,7 +1098,7 @@
         return;
       }
 
-      records.slice(0, 5).forEach(d => {
+      records.slice(0, 10).forEach(d => {
         const rawStatus = (d.status || '').toLowerCase();
         let statusBadge = '';
 

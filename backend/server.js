@@ -115,7 +115,7 @@ app.get('/api/grievances/stats', apiReadLimiter, async (req, res) => {
 app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   try {
     const { rows } = await pool.query(
-      'SELECT ticket_id, stream, branch, hall, category, description, status, created_at FROM grievances ORDER BY created_at DESC LIMIT 5'
+      'SELECT ticket_id, stream, branch, hall, category, description, status, created_at FROM grievances ORDER BY created_at DESC LIMIT 10'
     );
     res.status(200).json(rows);
   } catch (err) {
