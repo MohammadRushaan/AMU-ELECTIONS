@@ -163,11 +163,12 @@
           <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2 flex-wrap">
             <div class="flex items-center gap-2">
               <label class="text-[10px] text-slate-400 uppercase font-bold">Status:</label>
-              <select onchange="updateTicketStatus('${item.ticket_id}', this.value)" class="bg-slate-900 border border-slate-700 text-white rounded-lg px-2 py-1 text-xs focus:ring-1 focus:ring-amber-400 outline-none">
-                <option value="Scheduled for Court Action" ${item.status === 'Scheduled for Court Action' ? 'selected' : ''}>⏳ Scheduled</option>
-                <option value="Raised to Authorities" ${item.status === 'Raised to Authorities' ? 'selected' : ''}>🏛️ Raised to Authorities</option>
-                <option value="Redressed & Resolved" ${item.status === 'Redressed & Resolved' ? 'selected' : ''}>✓ Redressed & Resolved</option>
-              </select>
+              <select onchange="updateTicketStatus('${item.ticket_id}', this.value)" class="bg-slate-900 border border-slate-700 text-white rounded-lg px-2.5 py-1 text-xs focus:ring-1 focus:ring-amber-400 outline-none">
+              <option value="Issue Raised" ${item.status === 'Issue Raised' ? 'selected' : ''}>📌 Issue Raised</option>
+              <option value="Under Review" ${item.status === 'Under Review' ? 'selected' : ''}>🔍 Under Review</option>
+              <option value="Raised to Authorities" ${item.status === 'Raised to Authorities' ? 'selected' : ''}>🏛️ Raised to Authorities</option>
+              <option value="Redressed & Resolved" ${item.status === 'Redressed & Resolved' ? 'selected' : ''}>✓ Redressed &amp; Resolved</option>
+            </select>
             </div>
 
             <button onclick="deleteTicket('${item.ticket_id}')" class="text-red-400 hover:text-red-300 hover:bg-red-950/40 px-2.5 py-1 rounded-lg text-xs font-semibold border border-red-500/20 transition">

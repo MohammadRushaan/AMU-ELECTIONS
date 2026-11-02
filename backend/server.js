@@ -32,7 +32,8 @@ async function initDB() {
         category VARCHAR(64) NOT NULL,
         description TEXT NOT NULL,
         contact VARCHAR(64),
-        status VARCHAR(64) DEFAULT 'Registered & Scheduled',
+        // Inside initDB():
+        status VARCHAR(64) DEFAULT 'Issue Raised',',
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
     `);
@@ -174,7 +175,7 @@ app.post('/api/grievances', grievancePostLimiter, async (req, res) => {
 
     const insertQuery = `
       INSERT INTO grievances (ticket_id, stream, branch, hall, category, description, contact, status)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, 'Scheduled for Court Action')
+      VALUES ($1, $2, $3, $4, $5, $6, $7, 'Issue Raised')
       RETURNING *;
     `;
     const values = [ticket_id, stream, branch, hall, category, description, contact || null];
@@ -193,6 +194,7 @@ app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
     const { status } = req.body;
 
     const allowedStatuses = [
+      'Issue Raised',
       'Scheduled for Court Action',
       'Raised to Authorities',
       'Redressed & Resolved'
