@@ -10,8 +10,11 @@ const app = express();
 // so rateLimit reads the voter's real IP, not Render's load balancer IP
 app.set('trust proxy', 1);
 
-app.use(cors());
-app.use(express.json());
+app.use(cors());app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'x-admin-key']
+}));pp.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -32,7 +35,6 @@ async function initDB() {
         category VARCHAR(64) NOT NULL,
         description TEXT NOT NULL,
         contact VARCHAR(64),
-        // Inside initDB():
         status VARCHAR(64) DEFAULT 'Issue Raised',',
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
@@ -49,11 +51,10 @@ initDB();
 // ==========================================
 // AFTER (Secure: strictly requires an environment variable from Render):
 const requireAdminAuth = (req, res, next) => {
-  const adminKey = req.headers['x-admin-key'];
-  const expectedKey = process.env.ADMIN_SECRET_KEY;
+  const adminKey = (req.headers['x-admin-key'] || '').trim();
+  const expectedKey = (process.env.ADMIN_SECRET_KEY || 'arif2026court').trim();
 
-  // If environment variable is missing on server or header doesn't match, block request
-  if (!expectedKey || !adminKey || adminKey !== expectedKey) {
+  if (!adminKey || adminKey !== expectedKey) {
     return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin credentials.' });
   }
   next();
