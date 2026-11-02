@@ -14,7 +14,8 @@ app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'x-admin-key']
-}));pp.use(express.json());
+}));
+app.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
