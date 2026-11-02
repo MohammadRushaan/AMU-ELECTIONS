@@ -10,7 +10,7 @@ const app = express();
 // so rateLimit reads the voter's real IP, not Render's load balancer IP
 app.set('trust proxy', 1);
 
-app.use(cors());app.use(cors({
+app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'x-admin-key']
