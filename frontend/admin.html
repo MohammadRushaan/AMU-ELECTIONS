@@ -61,16 +61,58 @@
     let activeFilter = 'all';
 
     // Verify Passkey
-    function ensureAuth() {
+    // 1. Strict Server-Side Key Verification (Blocks wrong passkeys immediately)
+    async function verifyAndLogin() {
+      // If no key in session, prompt the user
       if (!adminKey) {
         adminKey = prompt("Enter Campaign Operations Passkey:");
-        if (!adminKey) {
-          document.body.innerHTML = '<div class="p-8 text-center text-red-400 font-bold font-mono">Access Denied. Reload to enter key.</div>';
-          return false;
-        }
-        sessionStorage.setItem('COURT_ADMIN_KEY', adminKey);
       }
-      return true;
+
+      if (!adminKey) {
+        blockAccess("Passkey required to access admin operations.");
+        return;
+      }
+
+      // Check passkey against backend before showing anything
+      try {
+        const verifyRes = await fetch(`${BACKEND_URL}/api/admin/verify`, {
+          headers: { 'x-admin-key': adminKey }
+        });
+
+        if (verifyRes.status === 401 || !verifyRes.ok) {
+          sessionStorage.removeItem('COURT_ADMIN_KEY');
+          adminKey = null;
+          blockAccess("Invalid Passkey. Access Denied.");
+          return;
+        }
+
+        // Passed: Key is confirmed by server
+        sessionStorage.setItem('COURT_ADMIN_KEY', adminKey);
+        await loadAdminData();
+
+      } catch (err) {
+        blockAccess("Could not connect to backend. Please wake up Render container.");
+      }
+    }
+
+    // 2. Lockout screen if wrong key is entered
+    function blockAccess(message) {
+      document.getElementById('grievanceGrid').innerHTML = `
+        <div class="col-span-full bg-red-950/60 border border-red-800 text-red-200 p-8 rounded-2xl text-center space-y-4">
+          <div class="text-3xl">🔒</div>
+          <div class="font-bold text-base font-mono">${message}</div>
+          <button onclick="retryLogin()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-4 py-2 rounded-xl transition">
+            Enter Passkey Again
+          </button>
+        </div>
+      `;
+      document.getElementById('counterSummary').innerText = 'Access Restricted';
+    }
+
+    function retryLogin() {
+      sessionStorage.removeItem('COURT_ADMIN_KEY');
+      adminKey = null;
+      verifyAndLogin();
     }
 
     function logoutAdmin() {
@@ -78,25 +120,22 @@
       location.reload();
     }
 
+    // 3. Fetch Data only after server verification succeeds
     async function loadAdminData() {
-      if (!ensureAuth()) return;
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances/admin-all`, {
           headers: { 'x-admin-key': adminKey }
         });
 
         if (res.status === 401) {
-          alert('Incorrect Passkey!');
-          sessionStorage.removeItem('COURT_ADMIN_KEY');
-          location.reload();
+          blockAccess("Session expired or unauthorized key.");
           return;
         }
 
         allRecords = await res.json();
         renderAdminCards();
       } catch (err) {
-        document.getElementById('grievanceGrid').innerHTML = 
-          '<div class="col-span-full bg-red-950/40 border border-red-800/50 p-4 rounded-xl text-center text-red-300 text-xs">Failed to fetch grievances. Ensure backend is awake.</div>';
+        blockAccess("Failed to fetch grievances from server.");
       }
     }
 
@@ -231,7 +270,7 @@
       a.click();
     }
 
-    document.addEventListener('DOMContentLoaded', loadAdminData);
+    document.addEventListener('DOMContentLoaded', verifyAndLogin);
   </script>
 </body>
 </html>
