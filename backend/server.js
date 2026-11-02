@@ -36,7 +36,7 @@ async function initDB() {
         category VARCHAR(64) NOT NULL,
         description TEXT NOT NULL,
         contact VARCHAR(64),
-        status VARCHAR(64) DEFAULT 'Issue Raised',',
+        status VARCHAR(64) DEFAULT 'Issue Raised',
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
     `);
