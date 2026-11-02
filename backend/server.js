@@ -47,10 +47,13 @@ initDB();
 // ==========================================
 // ADMIN AUTHENTICATION MIDDLEWARE
 // ==========================================
+// AFTER (Secure: strictly requires an environment variable from Render):
 const requireAdminAuth = (req, res, next) => {
   const adminKey = req.headers['x-admin-key'];
-  const expectedKey = process.env.ADMIN_SECRET_KEY || 'arif2026court';
-  if (!adminKey || adminKey !== expectedKey) {
+  const expectedKey = process.env.ADMIN_SECRET_KEY;
+
+  // If environment variable is missing on server or header doesn't match, block request
+  if (!expectedKey || !adminKey || adminKey !== expectedKey) {
     return res.status(401).json({ error: 'Unauthorized: Invalid or missing admin credentials.' });
   }
   next();
@@ -121,6 +124,13 @@ app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Database read failure' });
   }
+});
+
+// ==========================================
+// ADMIN AUTHENTICATION VERIFICATION ROUTE
+// ==========================================
+app.get('/api/admin/verify', requireAdminAuth, (req, res) => {
+  res.status(200).json({ success: true, message: 'Passkey verified successfully.' });
 });
 
 // GET: Admin feed (supports optional status and stream query filters, requires admin key)
