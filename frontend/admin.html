@@ -247,7 +247,7 @@
     async function saveTicketUpdate(ticket_id) {
       const statusEl = document.getElementById(`status-${ticket_id}`);
       const proofEl = document.getElementById(`proof-${ticket_id}`);
-      
+
       const status = statusEl ? statusEl.value : 'Issue Raised';
       const proof_url = proofEl ? proofEl.value.trim() : '';
 
@@ -262,18 +262,13 @@
         });
 
         if (!res.ok) {
-          alert('Failed to update ticket. Passkey may be incorrect.');
+          alert('Failed to update ticket. Check authorization.');
           return;
         }
 
-        // Refresh desk
-        if (typeof loadAdminData === 'function') {
-          await loadAdminData();
-        } else {
-          location.reload();
-        }
+        await loadAdminData();
       } catch (err) {
-        alert('Server error updating ticket.');
+        alert('Server communication error.');
       }
     }
 
