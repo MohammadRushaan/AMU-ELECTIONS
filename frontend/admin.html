@@ -173,46 +173,34 @@
         const waLink = rawPhone ? `https://wa.me/91${rawPhone.slice(-10)}?text=${encodeURIComponent(`Salam, regarding your issue ${item.ticket_id} submitted to Syed Arif Ali's Court Docket:`)}` : null;
 
         card.innerHTML = `
-          <div class="space-y-2">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-              <span class="font-mono text-xs font-black text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded">
-                ${item.ticket_id}
-              </span>
-              <span class="text-[11px] text-slate-400 font-mono">
-                ${new Date(item.created_at).toLocaleDateString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })}
-              </span>
-            </div>
-
+          <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="text-xs font-bold text-emerald-400">${item.stream} • ${item.branch}</div>
-              <div class="text-[11px] text-slate-400">Hall: <span class="text-slate-200 font-semibold">${item.hall}</span> | Category: <span class="text-slate-200 font-semibold">${item.category}</span></div>
+              <span class="font-mono text-amber-400 font-bold text-sm tracking-wider">${item.ticket_id}</span>
+              <span class="text-xs text-slate-400 ml-2">${item.stream} • ${item.branch} • ${item.hall}</span>
             </div>
-
-            <p class="text-xs text-slate-300 bg-slate-900 p-3 rounded-xl border border-slate-800/80 leading-relaxed font-sans">
-              "${item.description}"
-            </p>
-
-            <div class="text-[11px] text-slate-400 flex items-center justify-between">
-              <span>Contact: <strong class="text-white">${item.contact || 'Anonymous'}</strong></span>
-              ${waLink ? `<a href="${waLink}" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1">💬 WhatsApp Student</a>` : ''}
-            </div>
+            <button onclick="deleteTicket('${item.ticket_id}')" class="text-red-400 hover:text-red-300 text-xs font-mono">Delete</button>
           </div>
 
-          <!-- Admin Controls Row -->
-          <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2 flex-wrap">
-            <div class="flex items-center gap-2">
-              <label class="text-[10px] text-slate-400 uppercase font-bold">Status:</label>
-              <select onchange="updateTicketStatus('${item.ticket_id}', this.value)" class="bg-slate-900 border border-slate-700 text-white rounded-lg px-2.5 py-1 text-xs focus:ring-1 focus:ring-amber-400 outline-none">
-              <option value="Issue Raised" ${item.status === 'Issue Raised' ? 'selected' : ''}>📌 Issue Raised</option>
-              <option value="Under Review" ${item.status === 'Under Review' ? 'selected' : ''}>🔍 Under Review</option>
-              <option value="Raised to Authorities" ${item.status === 'Raised to Authorities' ? 'selected' : ''}>🏛️ Raised to Authorities</option>
-              <option value="Redressed & Resolved" ${item.status === 'Redressed & Resolved' ? 'selected' : ''}>✓ Redressed &amp; Resolved</option>
-            </select>
+          <p class="text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800 leading-relaxed">${item.description}</p>
+
+          <div class="space-y-2 pt-2 border-t border-slate-800">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-[11px] text-slate-400 font-mono">Status:</span>
+              <select id="status-${item.ticket_id}" class="bg-slate-900 border border-slate-700 text-white rounded-lg px-2.5 py-1 text-xs focus:ring-1 focus:ring-amber-400 outline-none">
+                <option value="Issue Raised" ${item.status === 'Issue Raised' ? 'selected' : ''}>📌 Issue Raised</option>
+                <option value="Under Review" ${item.status === 'Under Review' ? 'selected' : ''}>🔍 Under Review</option>
+                <option value="Raised to Authorities" ${item.status === 'Raised to Authorities' ? 'selected' : ''}>🏛️ Raised to Authorities</option>
+                <option value="Redressed & Resolved" ${item.status === 'Redressed & Resolved' ? 'selected' : ''}>✓ Redressed &amp; Resolved</option>
+              </select>
             </div>
 
-            <button onclick="deleteTicket('${item.ticket_id}')" class="text-red-400 hover:text-red-300 hover:bg-red-950/40 px-2.5 py-1 rounded-lg text-xs font-semibold border border-red-500/20 transition">
-              🗑️ Delete
-            </button>
+            <div class="flex items-center gap-2">
+              <input type="url" id="proof-${item.ticket_id}" value="${item.proof_url || ''}" placeholder="Paste proof photo/drive/file link..." class="flex-1 bg-slate-900 border border-slate-700 text-slate-200 placeholder-slate-500 rounded-lg px-2.5 py-1 text-xs outline-none focus:border-amber-400">
+              <button onclick="saveTicketUpdate('${item.ticket_id}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-3 py-1 rounded-lg transition whitespace-nowrap">
+                Save
+              </button>
+            </div>
+            ${item.proof_url ? `<a href="${item.proof_url}" target="_blank" class="inline-block text-[10px] text-emerald-400 hover:underline font-mono">✓ Current Proof Attached ↗</a>` : ''}
           </div>
         `;
         grid.appendChild(card);
@@ -253,6 +241,32 @@
         renderAdminCards();
       } catch (err) {
         alert('Failed to delete ticket.');
+      }
+    }
+
+    async function saveTicketUpdate(ticket_id) {
+      const status = document.getElementById(`status-${ticket_id}`).value;
+      const proof_url = document.getElementById(`proof-${ticket_id}`).value.trim();
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/grievances/${ticket_id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-admin-key': adminKey
+          },
+          body: JSON.stringify({ status, proof_url })
+        });
+
+        if (!res.ok) {
+          alert('Failed to update ticket. Check your authentication.');
+          return;
+        }
+
+        // Refresh list
+        await loadAdminData();
+      } catch (err) {
+        alert('Server connection error.');
       }
     }
 

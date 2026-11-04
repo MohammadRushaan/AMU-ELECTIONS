@@ -6,10 +6,10 @@ require('dotenv').config();
 
 const app = express();
 
-// REQUIRED ON RENDER: Tells Express to trust Render's reverse proxy 
-// so rateLimit reads the voter's real IP, not Render's load balancer IP
+// REQUIRED ON RENDER: Reverse proxy support for rate-limiting
 app.set('trust proxy', 1);
 
+// CORS configuration explicitly allowing custom auth headers
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -37,8 +37,10 @@ async function initDB() {
         description TEXT NOT NULL,
         contact VARCHAR(64),
         status VARCHAR(64) DEFAULT 'Issue Raised',
+        proof_url TEXT,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
+      ALTER TABLE grievances ADD COLUMN IF NOT EXISTS proof_url TEXT;
     `);
     console.log('Database initialized: grievances table ready.');
   } catch (err) {
@@ -50,7 +52,6 @@ initDB();
 // ==========================================
 // ADMIN AUTHENTICATION MIDDLEWARE
 // ==========================================
-// AFTER (Secure: strictly requires an environment variable from Render):
 const requireAdminAuth = (req, res, next) => {
   const adminKey = (req.headers['x-admin-key'] || '').trim();
   const expectedKey = (process.env.ADMIN_SECRET_KEY || 'arif2026court').trim();
@@ -64,19 +65,16 @@ const requireAdminAuth = (req, res, next) => {
 // ==========================================
 // RATE LIMITERS
 // ==========================================
-
-// Limiter for fetching public data (GET requests)
 const apiReadLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15-minute window
-  max: 300,                 // Up to 300 fetches per IP per 15 mins
+  windowMs: 15 * 60 * 1000,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-// Limiter for submitting issues (POST requests)
 const grievancePostLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15-minute window
-  max: 5,                   // Maximum 5 submissions per IP every 15 mins
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: { 
     error: 'Submission rate limit reached. Please wait a few minutes before submitting another issue.' 
   },
@@ -88,8 +86,7 @@ app.get('/', (req, res) => {
   res.send('Engineering Faculty Election Grievance Tracking API is live.');
 });
 
-// GET: Live aggregated metrics for the public count cards
-// 'Raised to Authorities', 'Resolved', and 'Redressed' all count under resolved
+// GET: Aggregated metrics for live count cards
 app.get('/api/grievances/stats', apiReadLimiter, async (req, res) => {
   try {
     const totalRes = await pool.query('SELECT COUNT(*) FROM grievances');
@@ -116,11 +113,11 @@ app.get('/api/grievances/stats', apiReadLimiter, async (req, res) => {
   }
 });
 
-// GET: Public docket (strictly limits to the 5 most recent records)
+// GET: Public docket (strictly limits to the 10 most recent records and includes proof_url)
 app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   try {
     const { rows } = await pool.query(
-      'SELECT ticket_id, stream, branch, hall, category, description, status, created_at FROM grievances ORDER BY created_at DESC LIMIT 10'
+      'SELECT ticket_id, stream, branch, hall, category, description, status, proof_url, created_at FROM grievances ORDER BY created_at DESC LIMIT 10'
     );
     res.status(200).json(rows);
   } catch (err) {
@@ -128,14 +125,12 @@ app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   }
 });
 
-// ==========================================
-// ADMIN AUTHENTICATION VERIFICATION ROUTE
-// ==========================================
+// GET: Passkey verification
 app.get('/api/admin/verify', requireAdminAuth, (req, res) => {
   res.status(200).json({ success: true, message: 'Passkey verified successfully.' });
 });
 
-// GET: Admin feed (supports optional status and stream query filters, requires admin key)
+// GET: Admin feed with full details and optional query filters
 app.get('/api/grievances/admin-all', requireAdminAuth, async (req, res) => {
   try {
     const { status, stream } = req.query;
@@ -166,7 +161,7 @@ app.get('/api/grievances/admin-all', requireAdminAuth, async (req, res) => {
   }
 });
 
-// POST: Register new issue from voter
+// POST: Voter registers new issue
 app.post('/api/grievances', grievancePostLimiter, async (req, res) => {
   try {
     const { stream, branch, hall, category, description, contact } = req.body;
@@ -199,15 +194,15 @@ app.post('/api/grievances', grievancePostLimiter, async (req, res) => {
   }
 });
 
-// PATCH: Update status (Secured by Admin Key)
+// PATCH: Admin updates status and sets resolution proof URL
 app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
   try {
     const { ticket_id } = req.params;
-    const { status } = req.body;
+    const { status, proof_url } = req.body;
 
     const allowedStatuses = [
       'Issue Raised',
-      'Scheduled for Court Action',
+      'Under Review',
       'Raised to Authorities',
       'Redressed & Resolved'
     ];
@@ -217,9 +212,12 @@ app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
     }
 
     const updateQuery = `
-      UPDATE grievances SET status = $1 WHERE ticket_id = $2 RETURNING *;
+      UPDATE grievances 
+      SET status = $1, proof_url = COALESCE($2, proof_url) 
+      WHERE ticket_id = $3 
+      RETURNING *;
     `;
-    const { rows } = await pool.query(updateQuery, [status, ticket_id]);
+    const { rows } = await pool.query(updateQuery, [status, proof_url !== undefined ? proof_url : null, ticket_id]);
 
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Ticket not found.' });
@@ -230,7 +228,7 @@ app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
   }
 });
 
-// DELETE: Remove a grievance permanently from PostgreSQL (Secured by Admin Key)
+// DELETE: Admin permanently deletes ticket
 app.delete('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
   try {
     const { ticket_id } = req.params;
@@ -241,7 +239,6 @@ app.delete('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
     }
     res.status(200).json({ message: 'Grievance deleted successfully', deleted: deleteRes.rows[0] });
   } catch (err) {
-    console.error('DELETE error:', err.message);
     res.status(500).json({ error: 'Database delete failure' });
   }
 });

@@ -920,6 +920,7 @@
                 <th class="py-2.5 px-3">Hall</th>
                 <th class="py-2.5 px-3">Category</th>
                 <th class="py-2.5 px-3">Status</th>
+                <th class="py-2.5 px-3 text-center">PROOF / ON-RECORD</th>
               </tr>
             </thead>
             <tbody id="grievanceDocketBody" class="divide-y divide-stone-200 font-medium">
@@ -1092,11 +1093,13 @@
     // 3. Render Table HTML with Dynamic Status Badges (Handles Raised to Authorities)
     // 3. Render Table HTML with Full Backward-Compatible Badge Colors
     function renderDocketTable(records) {
-      const tbody = document.getElementById('grievanceDocketBody');
+      // Finds the existing tbody or table
+      const tbody = document.getElementById('grievanceDocketBody') || document.querySelector('tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       if (!records || records.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-slate-400">No issues registered yet. Be the first to submit a concern.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-slate-400">No issues registered yet.</td></tr>';
         return;
       }
 
@@ -1104,47 +1107,50 @@
         const rawStatus = (d.status || '').toLowerCase();
         let statusBadge = '';
 
-        // 1. RESOLVED / REDRESSED (Green)
         if (rawStatus.includes('resolved') || rawStatus.includes('redressed')) {
           statusBadge = `
-            <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+            <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
               ✓ Resolved
             </span>`;
-
-        // 2. RAISED TO AUTHORITIES (Purple)
         } else if (rawStatus.includes('authorit')) {
           statusBadge = `
-            <span class="inline-flex items-center gap-1.5 bg-purple-100 text-purple-800 border border-purple-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+            <span class="inline-flex items-center gap-1.5 bg-purple-100 text-purple-800 border border-purple-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <span class="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
               🏛️ Raised to Authorities
             </span>`;
-
-        // 3. UNDER REVIEW / UNDER STATUTORY REVIEW (Blue)
         } else if (rawStatus.includes('review')) {
           statusBadge = `
-            <span class="inline-flex items-center gap-1.5 bg-sky-100 text-sky-800 border border-sky-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+            <span class="inline-flex items-center gap-1.5 bg-sky-100 text-sky-800 border border-sky-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <span class="w-1.5 h-1.5 rounded-full bg-sky-600 animate-pulse"></span>
-              🔍 Under Review by Team
+              🔍 Under Review
             </span>`;
-
-        // 4. ISSUE RAISED / SCHEDULED FOR COURT ACTION (Amber / Gold)
         } else {
           statusBadge = `
-            <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-sm">
+            <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-ping"></span>
               📌 Issue Raised
             </span>`;
         }
 
+        // Proof link cell
+        let proofCell = '<span class="text-slate-400 text-xs">—</span>';
+        if (d.proof_url && d.proof_url.trim() !== '') {
+          proofCell = `
+            <a href="${d.proof_url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-bold px-2.5 py-0.5 rounded-md transition">
+              📄 View Proof
+            </a>`;
+        }
+
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-amber-50/40 transition-colors border-b border-stone-100 last:border-none';
         tr.innerHTML = `
-          <td class="py-2.5 px-3 font-mono font-bold text-amu-emerald">${d.ticket_id}</td>
+          <td class="py-2.5 px-3 font-mono font-bold text-emerald-800">${d.ticket_id}</td>
           <td class="py-2.5 px-3 text-slate-700">${d.stream} (${d.branch})</td>
           <td class="py-2.5 px-3 text-slate-700">${d.hall}</td>
           <td class="py-2.5 px-3 text-slate-700">${d.category}</td>
           <td class="py-2.5 px-3">${statusBadge}</td>
+          <td class="py-2.5 px-3 text-center">${proofCell}</td>
         `;
         tbody.appendChild(tr);
       });
