@@ -195,6 +195,7 @@ app.post('/api/grievances', grievancePostLimiter, async (req, res) => {
 });
 
 // PATCH: Admin updates status and sets resolution proof URL
+// PATCH: Update status and proof_url
 app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
   try {
     const { ticket_id } = req.params;
@@ -211,19 +212,30 @@ app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
       return res.status(400).json({ error: 'Invalid status type submitted.' });
     }
 
+    // Normalizes URL so relative URLs or missing https:// still work
+    let cleanedProof = (proof_url || '').trim();
+    if (cleanedProof && !cleanedProof.startsWith('http://') && !cleanedProof.startsWith('https://')) {
+      if (cleanedProof.startsWith('://')) {
+        cleanedProof = 'https' + cleanedProof;
+      } else {
+        cleanedProof = 'https://' + cleanedProof;
+      }
+    }
+
     const updateQuery = `
       UPDATE grievances 
-      SET status = $1, proof_url = COALESCE($2, proof_url) 
+      SET status = $1, proof_url = $2 
       WHERE ticket_id = $3 
       RETURNING *;
     `;
-    const { rows } = await pool.query(updateQuery, [status, proof_url !== undefined ? proof_url : null, ticket_id]);
+    const { rows } = await pool.query(updateQuery, [status, cleanedProof || null, ticket_id]);
 
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Ticket not found.' });
     }
     res.status(200).json(rows[0]);
   } catch (err) {
+    console.error('Update failure:', err.message);
     res.status(500).json({ error: 'Update failure' });
   }
 });
