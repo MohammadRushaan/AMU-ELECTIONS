@@ -36,10 +36,10 @@
     <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
       <div class="flex items-center gap-2 flex-wrap">
         <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px]">Filter Status:</span>
-        <button onclick="filterBy('all')" class="status-tab px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold">All</button>
-        <button onclick="filterBy('Scheduled')" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">⏳ Scheduled</button>
-        <button onclick="filterBy('Raised to Authorities')" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">🏛️ Raised to Authorities</button>
-        <button onclick="filterBy('Resolved')" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">✓ Resolved</button>
+        <button onclick="filterBy('all', event)" class="status-tab px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold">All</button>
+        <button onclick="filterBy('Under Review', event)" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">🔍 Under Review</button>
+        <button onclick="filterBy('Raised to Authorities', event)" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">🏛️ Raised to Authorities</button>
+        <button onclick="filterBy('Resolved', event)" class="status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">✓ Resolved</button>
       </div>
 
       <div class="text-slate-400 font-mono" id="counterSummary">
@@ -60,10 +60,8 @@
     let allRecords = [];
     let activeFilter = 'all';
 
-    // Verify Passkey
-    // 1. Strict Server-Side Key Verification (Blocks wrong passkeys immediately)
+    // 1. Strict Server-Side Key Verification
     async function verifyAndLogin() {
-      // If no key in session, prompt the user
       if (!adminKey) {
         adminKey = prompt("Enter Campaign Operations Passkey:");
       }
@@ -73,10 +71,9 @@
         return;
       }
 
-      // Check passkey against backend before showing anything
       try {
         const verifyRes = await fetch(`${BACKEND_URL}/api/admin/verify`, {
-          headers: { 'x-admin-key': adminKey }
+          headers: { 'x-admin-key': adminKey.trim() }
         });
 
         if (verifyRes.status === 401 || !verifyRes.ok) {
@@ -86,8 +83,7 @@
           return;
         }
 
-        // Passed: Key is confirmed by server
-        sessionStorage.setItem('COURT_ADMIN_KEY', adminKey);
+        sessionStorage.setItem('COURT_ADMIN_KEY', adminKey.trim());
         await loadAdminData();
 
       } catch (err) {
@@ -95,7 +91,7 @@
       }
     }
 
-    // 2. Lockout screen if wrong key is entered
+    // 2. Lockout screen if key fails
     function blockAccess(message) {
       document.getElementById('grievanceGrid').innerHTML = `
         <div class="col-span-full bg-red-950/60 border border-red-800 text-red-200 p-8 rounded-2xl text-center space-y-4">
@@ -120,7 +116,7 @@
       location.reload();
     }
 
-    // 3. Fetch Data only after server verification succeeds
+    // 3. Fetch data once authenticated
     async function loadAdminData() {
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances/admin-all`, {
@@ -139,12 +135,14 @@
       }
     }
 
-    function filterBy(status) {
+    function filterBy(status, evt) {
       activeFilter = status;
       document.querySelectorAll('.status-tab').forEach(b => {
         b.className = 'status-tab px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold hover:bg-slate-700';
       });
-      event.target.className = 'status-tab px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold';
+      if (evt && evt.target) {
+        evt.target.className = 'status-tab px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold';
+      }
       renderAdminCards();
     }
 
@@ -168,10 +166,6 @@
         const card = document.createElement('div');
         card.className = "bg-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition";
 
-        // WhatsApp direct link generator
-        const rawPhone = (item.contact || '').replace(/[^0-9]/g, '');
-        const waLink = rawPhone ? `https://wa.me/91${rawPhone.slice(-10)}?text=${encodeURIComponent(`Salam, regarding your issue ${item.ticket_id} submitted to Syed Arif Ali's Court Docket:`)}` : null;
-
         card.innerHTML = `
           <div class="flex items-start justify-between gap-4">
             <div>
@@ -179,6 +173,11 @@
               <span class="text-xs text-slate-400 ml-2">${item.stream} • ${item.branch} • ${item.hall}</span>
             </div>
             <button onclick="deleteTicket('${item.ticket_id}')" class="text-red-400 hover:text-red-300 text-xs font-mono">Delete</button>
+          </div>
+
+          <div class="text-[11px] font-mono text-slate-400">
+            <span class="text-slate-500">Contact:</span> ${item.contact || 'None Provided'} | 
+            <span class="text-slate-500">Category:</span> ${item.category}
           </div>
 
           <p class="text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800 leading-relaxed">${item.description}</p>
@@ -195,53 +194,16 @@
             </div>
 
             <div class="flex items-center gap-2">
-              <input type="url" id="proof-${item.ticket_id}" value="${item.proof_url || ''}" placeholder="Paste proof photo/drive/file link..." class="flex-1 bg-slate-900 border border-slate-700 text-slate-200 placeholder-slate-500 rounded-lg px-2.5 py-1 text-xs outline-none focus:border-amber-400">
-              <button onclick="saveTicketUpdate('${item.ticket_id}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-3 py-1 rounded-lg transition whitespace-nowrap">
+              <input type="text" id="proof-${item.ticket_id}" value="${item.proof_url || ''}" placeholder="Paste proof photo/drive/file link..." class="flex-1 bg-slate-900 border border-slate-700 text-slate-200 placeholder-slate-500 rounded-lg px-2.5 py-1 text-xs outline-none focus:border-amber-400">
+              <button type="button" onclick="saveTicketUpdate('${item.ticket_id}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-3 py-1 rounded-lg transition whitespace-nowrap">
                 Save
               </button>
             </div>
-            ${item.proof_url ? `<a href="${item.proof_url}" target="_blank" class="inline-block text-[10px] text-emerald-400 hover:underline font-mono">✓ Current Proof Attached ↗</a>` : ''}
+            ${item.proof_url ? `<a href="${item.proof_url}" target="_blank" rel="noopener noreferrer" class="inline-block text-[10px] text-emerald-400 hover:underline font-mono">✓ Current Proof Attached ↗</a>` : ''}
           </div>
         `;
         grid.appendChild(card);
       });
-    }
-
-    async function updateTicketStatus(ticketId, newStatus) {
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/grievances/${ticketId}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-admin-key': adminKey
-          },
-          body: JSON.stringify({ status: newStatus })
-        });
-        if (!res.ok) throw new Error();
-        const updated = await res.json();
-        
-        // Update local state
-        const target = allRecords.find(r => r.ticket_id === ticketId);
-        if (target) target.status = updated.status;
-        renderAdminCards();
-      } catch (err) {
-        alert('Failed to update ticket status. Check credentials and server status.');
-      }
-    }
-
-    async function deleteTicket(ticketId) {
-      if (!confirm(`Are you sure you want to delete ticket ${ticketId}? This action is irreversible.`)) return;
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/grievances/${ticketId}`, {
-          method: 'DELETE',
-          headers: { 'x-admin-key': adminKey }
-        });
-        if (!res.ok) throw new Error();
-        allRecords = allRecords.filter(r => r.ticket_id !== ticketId);
-        renderAdminCards();
-      } catch (err) {
-        alert('Failed to delete ticket.');
-      }
     }
 
     async function saveTicketUpdate(ticket_id) {
@@ -249,14 +211,13 @@
       const proofEl = document.getElementById(`proof-${ticket_id}`);
 
       if (!statusEl || !proofEl) {
-        alert(`DOM Error: Could not find elements for ID status-${ticket_id} or proof-${ticket_id}`);
+        alert(`DOM error: missing inputs for ticket ${ticket_id}`);
         return;
       }
 
       const status = statusEl.value;
       let proof_url = proofEl.value.trim();
 
-      // If user pasted starting with '://' or forgot https://
       if (proof_url && !proof_url.startsWith('http://') && !proof_url.startsWith('https://')) {
         if (proof_url.startsWith('://')) {
           proof_url = 'https' + proof_url;
@@ -264,8 +225,6 @@
           proof_url = 'https://' + proof_url;
         }
       }
-
-      console.log("Sending payload:", { ticket_id, status, proof_url });
 
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances/${encodeURIComponent(ticket_id)}`, {
@@ -278,26 +237,40 @@
         });
 
         const data = await res.json();
-        console.log("Server response:", data);
 
         if (!res.ok) {
           alert(`Update failed: ${data.error || 'Server error'}`);
           return;
         }
 
-        alert(`Saved successfully! Proof URL: ${data.proof_url || 'None'}`);
+        alert(`Saved successfully! Proof: ${data.proof_url || 'None'}`);
         await loadAdminData();
       } catch (err) {
         console.error(err);
-        alert('Network/Server connection error.');
+        alert('Server communication error.');
+      }
+    }
+
+    async function deleteTicket(ticketId) {
+      if (!confirm(`Are you sure you want to delete ticket ${ticketId}? This action is irreversible.`)) return;
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/grievances/${encodeURIComponent(ticketId)}`, {
+          method: 'DELETE',
+          headers: { 'x-admin-key': adminKey }
+        });
+        if (!res.ok) throw new Error();
+        allRecords = allRecords.filter(r => r.ticket_id !== ticketId);
+        renderAdminCards();
+      } catch (err) {
+        alert('Failed to delete ticket.');
       }
     }
 
     function exportCSV() {
       if (!allRecords.length) return alert('No data to export.');
-      let csv = 'Ticket ID,Stream,Branch,Hall,Category,Description,Contact,Status,Date\n';
+      let csv = 'Ticket ID,Stream,Branch,Hall,Category,Description,Contact,Status,Proof URL,Date\n';
       allRecords.forEach(r => {
-        csv += `"${r.ticket_id}","${r.stream}","${r.branch}","${r.hall}","${r.category}","${(r.description || '').replace(/"/g, '""')}","${r.contact || ''}","${r.status}","${r.created_at}"\n`;
+        csv += `"${r.ticket_id}","${r.stream}","${r.branch}","${r.hall}","${r.category}","${(r.description || '').replace(/"/g, '""')}","${r.contact || ''}","${r.status}","${r.proof_url || ''}","${r.created_at}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
