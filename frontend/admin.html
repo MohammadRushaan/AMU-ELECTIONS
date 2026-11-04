@@ -248,11 +248,27 @@
       const statusEl = document.getElementById(`status-${ticket_id}`);
       const proofEl = document.getElementById(`proof-${ticket_id}`);
 
-      const status = statusEl ? statusEl.value : 'Issue Raised';
-      const proof_url = proofEl ? proofEl.value.trim() : '';
+      if (!statusEl || !proofEl) {
+        alert(`DOM Error: Could not find elements for ID status-${ticket_id} or proof-${ticket_id}`);
+        return;
+      }
+
+      const status = statusEl.value;
+      let proof_url = proofEl.value.trim();
+
+      // If user pasted starting with '://' or forgot https://
+      if (proof_url && !proof_url.startsWith('http://') && !proof_url.startsWith('https://')) {
+        if (proof_url.startsWith('://')) {
+          proof_url = 'https' + proof_url;
+        } else {
+          proof_url = 'https://' + proof_url;
+        }
+      }
+
+      console.log("Sending payload:", { ticket_id, status, proof_url });
 
       try {
-        const res = await fetch(`${BACKEND_URL}/api/grievances/${ticket_id}`, {
+        const res = await fetch(`${BACKEND_URL}/api/grievances/${encodeURIComponent(ticket_id)}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -261,14 +277,19 @@
           body: JSON.stringify({ status, proof_url })
         });
 
+        const data = await res.json();
+        console.log("Server response:", data);
+
         if (!res.ok) {
-          alert('Failed to update ticket. Check authorization.');
+          alert(`Update failed: ${data.error || 'Server error'}`);
           return;
         }
 
+        alert(`Saved successfully! Proof URL: ${data.proof_url || 'None'}`);
         await loadAdminData();
       } catch (err) {
-        alert('Server communication error.');
+        console.error(err);
+        alert('Network/Server connection error.');
       }
     }
 

@@ -113,7 +113,7 @@ app.get('/api/grievances/stats', apiReadLimiter, async (req, res) => {
   }
 });
 
-// GET: Public docket (strictly limits to the 10 most recent records and includes proof_url)
+// GET: Public docket (limits to 10 most recent records and includes proof_url)
 app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   try {
     const { rows } = await pool.query(
@@ -125,7 +125,7 @@ app.get('/api/grievances', apiReadLimiter, async (req, res) => {
   }
 });
 
-// GET: Passkey verification
+// GET: Admin key verification endpoint
 app.get('/api/admin/verify', requireAdminAuth, (req, res) => {
   res.status(200).json({ success: true, message: 'Passkey verified successfully.' });
 });
@@ -194,8 +194,7 @@ app.post('/api/grievances', grievancePostLimiter, async (req, res) => {
   }
 });
 
-// PATCH: Admin updates status and sets resolution proof URL
-// PATCH: Update status and proof_url
+// PATCH: Admin updates status and proof_url
 app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
   try {
     const { ticket_id } = req.params;
@@ -212,7 +211,7 @@ app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
       return res.status(400).json({ error: 'Invalid status type submitted.' });
     }
 
-    // Normalizes URL so relative URLs or missing https:// still work
+    // Sanitize and normalize URL
     let cleanedProof = (proof_url || '').trim();
     if (cleanedProof && !cleanedProof.startsWith('http://') && !cleanedProof.startsWith('https://')) {
       if (cleanedProof.startsWith('://')) {
@@ -236,7 +235,7 @@ app.patch('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
     res.status(200).json(rows[0]);
   } catch (err) {
     console.error('Update failure:', err.message);
-    res.status(500).json({ error: 'Update failure' });
+    res.status(500).json({ error: 'Update failure: ' + err.message });
   }
 });
 
@@ -251,6 +250,7 @@ app.delete('/api/grievances/:ticket_id', requireAdminAuth, async (req, res) => {
     }
     res.status(200).json({ message: 'Grievance deleted successfully', deleted: deleteRes.rows[0] });
   } catch (err) {
+    console.error('DELETE error:', err.message);
     res.status(500).json({ error: 'Database delete failure' });
   }
 });
