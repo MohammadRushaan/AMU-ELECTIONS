@@ -245,8 +245,11 @@
     }
 
     async function saveTicketUpdate(ticket_id) {
-      const status = document.getElementById(`status-${ticket_id}`).value;
-      const proof_url = document.getElementById(`proof-${ticket_id}`).value.trim();
+      const statusEl = document.getElementById(`status-${ticket_id}`);
+      const proofEl = document.getElementById(`proof-${ticket_id}`);
+      
+      const status = statusEl ? statusEl.value : 'Issue Raised';
+      const proof_url = proofEl ? proofEl.value.trim() : '';
 
       try {
         const res = await fetch(`${BACKEND_URL}/api/grievances/${ticket_id}`, {
@@ -259,14 +262,18 @@
         });
 
         if (!res.ok) {
-          alert('Failed to update ticket. Check your authentication.');
+          alert('Failed to update ticket. Passkey may be incorrect.');
           return;
         }
 
-        // Refresh list
-        await loadAdminData();
+        // Refresh desk
+        if (typeof loadAdminData === 'function') {
+          await loadAdminData();
+        } else {
+          location.reload();
+        }
       } catch (err) {
-        alert('Server connection error.');
+        alert('Server error updating ticket.');
       }
     }
 
